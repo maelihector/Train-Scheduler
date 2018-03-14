@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Train Scheduler</title>
+  <!--Import Google Icon Font-->
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/4.11.0/firebase-app.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/4.11.0/firebase-auth.js"></script>
+  <script defer src="/__/firebase/4.11.0/firebase-database.js"></script>
+  
+  <!-- initialize the SDK after all desired features are loaded -->
+  <script defer src="/__/firebase/init.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+  <link type="text/css" rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <h2 class="header center-align">Train Scheduler</h2>
+  <div class="parallax-container">
+    <div class="parallax">
+      <img src="images/background3.jpg">
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div class="section white">
+    <div class="row container">
+      <table class="responsive-table highlight" id="train-table">
+        <thead>
+          <tr>
+            <th>Train Name</th>
+            <th>Train Start Time</th>
+            <th>Destination</th>
+            <th>Frequency</th>
+            <th>Next Train</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Indiana Express</td>
+            <td>HHmm</td>
+            <td>Louisville, KY</td>
+            <td>mm</td>
+            <td>HH:mm</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="row container">
+    <!-- User Enters information here -->
+    <form class="col s12">
+      <br>
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="large material-icons prefix">train</i>
+          <input id="icon_train" type="text" class="validate trainName-input">
+          <label class="active" for="trainName-input">Train Name</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="large material-icons prefix">access_time</i>
+          <input id="icon_access_time" type="text" class="timepicker trainStart-input">
+          <label for="trainStart-input">First Train Time in Military Time</label>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="large material-icons prefix">place</i>
+          <input id="icon_place" type="text" class="validate destination-input">
+          <label class="active" for="destination-input">Destination</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="large material-icons prefix">av_timer</i>
+          <input id="icon_av_timer" type="number" class="validate frequency-input">
+          <label class="active" for="frequency-input">Frequency in Minutes</label>
+        </div>
+      </div>
+    </form>
+    <button id="add-train-btn" class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+  </div>
+  <br>
+  <footer class="page-footer">
+    <div class="footer-copyright">
+      <div class="container center-align">
+        © 2018 Copyright Text
+      </div>
+    </div>
+  </footer>
+  
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="js/setup.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/index.js"></script>
+  <script>
+
+
+    // document.addEventListener('DOMContentLoaded', function() {
+    //
+    // // The Firebase SDK is initialized and available here!
+    //
+    // firebase.auth().onAuthStateChanged(user => { });
+    // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+    // firebase.messaging().requestPermission().then(() => { });
+    // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+    //
+    //
+
+    //   try {
+    //     let app = firebase.app();
+    //     let features = ['auth', 'database'].filter(feature => typeof app[feature] === 'function');
+    //     document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+    //   } catch (e) {
+    //     console.error(e);
+    //     document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+    //   }
+    // });
+  </script>
+</body>
+
+</html>
