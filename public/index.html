@@ -5,19 +5,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Train Scheduler</title>
+  
   <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ 
   <!-- update the version number as needed -->
   <script defer src="/__/firebase/4.11.0/firebase-app.js"></script>
+ 
   <!-- include only the Firebase features as you need -->
   <script defer src="/__/firebase/4.11.0/firebase-auth.js"></script>
   <script defer src="/__/firebase/4.11.0/firebase-database.js"></script>
-  
+
   <!-- initialize the SDK after all desired features are loaded -->
   <script defer src="/__/firebase/init.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-  
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    crossorigin="anonymous"></script>
+
+  <!-- Moment.js Reference -->
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+  <!-- style links -->
   <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
   <link type="text/css" rel="stylesheet" href="css/style.css" />
 </head>
@@ -65,12 +72,12 @@
       <div class="row">
         <div class="input-field col s6">
           <i class="large material-icons prefix">train</i>
-          <input id="icon_train" type="text" class="validate trainName-input">
+          <input id="icon_train" type="text" class="validate trainName-input" name="trainName">
           <label class="active" for="trainName-input">Train Name</label>
         </div>
         <div class="input-field col s6">
           <i class="large material-icons prefix">access_time</i>
-          <input id="icon_access_time" type="text" class="timepicker trainStart-input">
+          <input id="icon_access_time" type="text" class="timepicker trainStart-input" name="trainStart">
           <label for="trainStart-input">First Train Time in Military Time</label>
         </div>
       </div>
@@ -79,12 +86,12 @@
       <div class="row">
         <div class="input-field col s6">
           <i class="large material-icons prefix">place</i>
-          <input id="icon_place" type="text" class="validate destination-input">
+          <input id="icon_place" type="text" class="validate destination-input" name="destinationName">
           <label class="active" for="destination-input">Destination</label>
         </div>
         <div class="input-field col s6">
           <i class="large material-icons prefix">av_timer</i>
-          <input id="icon_av_timer" type="number" class="validate frequency-input">
+          <input id="icon_av_timer" type="number" class="validate frequency-input" name="frequencyMins">
           <label class="active" for="frequency-input">Frequency in Minutes</label>
         </div>
       </div>
@@ -99,14 +106,12 @@
       </div>
     </div>
   </footer>
-  
+
   <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
   <script src="js/setup.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/index.js"></script>
   <script>
-
-
     // document.addEventListener('DOMContentLoaded', function() {
     //
     // // The Firebase SDK is initialized and available here!
