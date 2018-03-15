@@ -1,46 +1,134 @@
-[debug] [2018-03-14T17:23:59.612Z] ----------------------------------------------------------------------
-[debug] [2018-03-14T17:23:59.614Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
-[debug] [2018-03-14T17:23:59.614Z] CLI Version:   3.17.6
-[debug] [2018-03-14T17:23:59.614Z] Platform:      darwin
-[debug] [2018-03-14T17:23:59.614Z] Node Version:  v9.8.0
-[debug] [2018-03-14T17:23:59.615Z] Time:          Wed Mar 14 2018 12:23:59 GMT-0500 (CDT)
-[debug] [2018-03-14T17:23:59.615Z] ----------------------------------------------------------------------
+[debug] [2018-03-14T22:53:04.236Z] ----------------------------------------------------------------------
+[debug] [2018-03-14T22:53:04.239Z] Command:       /usr/local/Cellar/node/9.3.0_1/bin/node /usr/local/bin/firebase init
+[debug] [2018-03-14T22:53:04.239Z] CLI Version:   3.17.5
+[debug] [2018-03-14T22:53:04.239Z] Platform:      darwin
+[debug] [2018-03-14T22:53:04.239Z] Node Version:  v9.3.0
+[debug] [2018-03-14T22:53:04.240Z] Time:          Wed Mar 14 2018 17:53:04 GMT-0500 (CDT)
+[debug] [2018-03-14T22:53:04.240Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2018-03-14T17:23:59.668Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2018-03-14T17:23:59.668Z] > authorizing via signed-in user
-[debug] [2018-03-14T17:23:59.669Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2018-03-14T17:23:59.669Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
- { refresh_token: '1/O5kRN6CqYWXsrCQv10uHU0Lcht0NUoqHBb5M70keAuI',
+[debug] [2018-03-14T22:53:04.252Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2018-03-14T22:53:04.252Z] > authorizing via signed-in user
+[info] 
+     🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥     🔥🔥🔥     🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥
+     🔥🔥        🔥🔥  🔥🔥     🔥🔥 🔥🔥       🔥🔥     🔥🔥  🔥🔥   🔥🔥  🔥🔥       🔥🔥
+     🔥🔥🔥🔥🔥🔥    🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥   🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥
+     🔥🔥        🔥🔥  🔥🔥    🔥🔥  🔥🔥       🔥🔥     🔥🔥 🔥🔥     🔥🔥       🔥🔥 🔥🔥
+     🔥🔥       🔥🔥🔥🔥 🔥🔥     🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥     🔥🔥  🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/maelihector/Library/Mobile Documents/com~apple~CloudDocs/materializeRepos/Train-Scheduler
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2018-03-14T22:53:10.878Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-03-14T22:53:10.878Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/eOKSdp8D3JRuFfnm2rkHZvx6cCEDYn9YtOoOAK-U93E',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Wed Mar 14 2018 17:53:10 GMT-0500 (CDT)
+[debug] [2018-03-14T22:53:11.015Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-14T22:53:11.031Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+  
+ Wed Mar 14 2018 17:53:11 GMT-0500 (CDT)
+[debug] [2018-03-14T22:53:11.521Z] <<< HTTP RESPONSE 200
+[info] i  .firebaserc already has a default project, skipping
+[info] 
+=== Database Setup
+[info] 
+[info] Firebase Realtime Database Rules allow you to define how your data should be
+[info] structured and when your data can be read from and written to.
+[info] 
+[debug] [2018-03-14T22:58:25.343Z] ----------------------------------------------------------------------
+[debug] [2018-03-14T22:58:25.346Z] Command:       /usr/local/Cellar/node/9.3.0_1/bin/node /usr/local/bin/firebase serve
+[debug] [2018-03-14T22:58:25.346Z] CLI Version:   3.17.5
+[debug] [2018-03-14T22:58:25.346Z] Platform:      darwin
+[debug] [2018-03-14T22:58:25.346Z] Node Version:  v9.3.0
+[debug] [2018-03-14T22:58:25.346Z] Time:          Wed Mar 14 2018 17:58:25 GMT-0500 (CDT)
+[debug] [2018-03-14T22:58:25.347Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-03-14T22:58:25.357Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-03-14T22:58:25.357Z] > authorizing via signed-in user
+[debug] [2018-03-14T22:58:25.358Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-03-14T22:58:25.359Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/eOKSdp8D3JRuFfnm2rkHZvx6cCEDYn9YtOoOAK-U93E',
   client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
   client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
   grant_type: 'refresh_token',
   scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
- Wed Mar 14 2018 12:23:59 GMT-0500 (CDT)
-[debug] [2018-03-14T17:23:59.997Z] <<< HTTP RESPONSE 200
-[debug] [2018-03-14T17:24:00.063Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/train-scheduler-bbc3e  
+ Wed Mar 14 2018 17:58:25 GMT-0500 (CDT)
+[debug] [2018-03-14T22:58:25.504Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-14T22:58:25.521Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/train-scheduler-bbc3e  
   
- Wed Mar 14 2018 12:24:00 GMT-0500 (CDT)
-[debug] [2018-03-14T17:24:01.009Z] <<< HTTP RESPONSE 200
-[debug] [2018-03-14T17:24:01.010Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/train-scheduler-bbc3e/tokens  
+ Wed Mar 14 2018 17:58:25 GMT-0500 (CDT)
+[debug] [2018-03-14T22:58:25.884Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-14T22:58:25.885Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/train-scheduler-bbc3e/tokens  
   
- Wed Mar 14 2018 12:24:01 GMT-0500 (CDT)
-[debug] [2018-03-14T17:24:01.430Z] <<< HTTP RESPONSE 200
-[debug] [2018-03-14T17:24:01.431Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/train-scheduler-bbc3e  
+ Wed Mar 14 2018 17:58:25 GMT-0500 (CDT)
+[debug] [2018-03-14T22:58:26.616Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-14T22:58:26.617Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/train-scheduler-bbc3e  
   
- Wed Mar 14 2018 12:24:01 GMT-0500 (CDT)
-[debug] [2018-03-14T17:24:01.766Z] <<< HTTP RESPONSE 200
+ Wed Mar 14 2018 17:58:26 GMT-0500 (CDT)
+[debug] [2018-03-14T22:58:26.780Z] <<< HTTP RESPONSE 200
 [info] 
-[info] === Serving from '/Users/mhector/Library/Mobile Documents/com~apple~CloudDocs/materializeRepos/Train-Scheduler'...
+[info] === Serving from '/Users/maelihector/Library/Mobile Documents/com~apple~CloudDocs/materializeRepos/Train-Scheduler'...
 [info] 
-[debug] [2018-03-14T17:24:01.767Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/911719863589/clients/_:getWebAppConfig  
+[debug] [2018-03-14T22:58:26.783Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/911719863589/clients/_:getWebAppConfig  
   
- Wed Mar 14 2018 12:24:01 GMT-0500 (CDT)
-[debug] [2018-03-14T17:24:02.432Z] <<< HTTP RESPONSE 200
-[warn] ⚠  hosting: Port 5000 is not available. Trying another port...
-[debug] [2018-03-14T17:24:02.545Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/911719863589/clients/_:getWebAppConfig  
-  
- Wed Mar 14 2018 12:24:02 GMT-0500 (CDT)
-[debug] [2018-03-14T17:24:02.843Z] <<< HTTP RESPONSE 200
+ Wed Mar 14 2018 17:58:26 GMT-0500 (CDT)
+[debug] [2018-03-14T22:58:27.075Z] <<< HTTP RESPONSE 200
 [info] i  hosting: Serving hosting files from: public
-[info] ✔  hosting: Local server: http://localhost:5004
+[info] ✔  hosting: Local server: http://localhost:5000
+
+[debug] [2018-03-15T17:53:20.829Z] ----------------------------------------------------------------------
+[debug] [2018-03-15T17:53:20.831Z] Command:       /usr/local/Cellar/node/9.3.0_1/bin/node /usr/local/bin/firebase serve
+[debug] [2018-03-15T17:53:20.831Z] CLI Version:   3.17.5
+[debug] [2018-03-15T17:53:20.831Z] Platform:      darwin
+[debug] [2018-03-15T17:53:20.832Z] Node Version:  v9.3.0
+[debug] [2018-03-15T17:53:20.834Z] Time:          Thu Mar 15 2018 12:53:20 GMT-0500 (CDT)
+[debug] [2018-03-15T17:53:20.834Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-03-15T17:53:20.847Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-03-15T17:53:20.847Z] > authorizing via signed-in user
+[debug] [2018-03-15T17:53:20.849Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-03-15T17:53:20.849Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/eOKSdp8D3JRuFfnm2rkHZvx6cCEDYn9YtOoOAK-U93E',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu Mar 15 2018 12:53:20 GMT-0500 (CDT)
+[debug] [2018-03-15T17:53:21.091Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-15T17:53:21.107Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/train-scheduler-bbc3e  
+  
+ Thu Mar 15 2018 12:53:21 GMT-0500 (CDT)
+[debug] [2018-03-15T17:53:21.878Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-15T17:53:21.878Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/train-scheduler-bbc3e/tokens  
+  
+ Thu Mar 15 2018 12:53:21 GMT-0500 (CDT)
+[debug] [2018-03-15T17:53:22.394Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-15T17:53:22.395Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/train-scheduler-bbc3e  
+  
+ Thu Mar 15 2018 12:53:22 GMT-0500 (CDT)
+[debug] [2018-03-15T17:53:22.739Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/maelihector/Library/Mobile Documents/com~apple~CloudDocs/materializeRepos/Train-Scheduler'...
+[info] 
+[debug] [2018-03-15T17:53:22.743Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/911719863589/clients/_:getWebAppConfig  
+  
+ Thu Mar 15 2018 12:53:22 GMT-0500 (CDT)
+[debug] [2018-03-15T17:53:24.421Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5000
 

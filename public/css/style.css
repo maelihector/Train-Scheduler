@@ -37,22 +37,21 @@ form {
 .page-footer {
     background-color: rgb(4, 44, 19);
 }
+
 .input-field .prefix {
     font-size: 4rem;
 }
 
-.input-field .prefix ~ input,
-.input-field .prefix ~ textarea,
-.input-field .prefix ~ label,
-.input-field .prefix ~ .validate ~ label,
-.input-field .prefix ~ .autocomplete-content {
-  margin-left: 4rem;
-  width: 92%;
-  width: calc(100% - 7rem);
+.input-field .prefix~input,
+.input-field .prefix~textarea,
+.input-field .prefix~label,
+.input-field .prefix~.validate~label,
+.input-field .prefix~.autocomplete-content {
+    margin-left: 4rem;
+    width: 92%;
+    width: calc(100% - 7rem);
 }
 
-.input-field .prefix ~ label {
+.input-field .prefix~label {
     margin-left: 4rem;
-  }
-
-  
+}
