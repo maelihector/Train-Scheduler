@@ -5,19 +5,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Train Scheduler</title>
+
   <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <!-- update the version number as needed -->
   <script defer src="/__/firebase/4.11.0/firebase-app.js"></script>
+
   <!-- include only the Firebase features as you need -->
   <script defer src="/__/firebase/4.11.0/firebase-auth.js"></script>
   <script defer src="/__/firebase/4.11.0/firebase-database.js"></script>
-  
+
   <!-- initialize the SDK after all desired features are loaded -->
   <script defer src="/__/firebase/init.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-  
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    crossorigin="anonymous"></script>
+
+  <!-- Moment.js Reference -->
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+  <!-- style links -->
   <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
   <link type="text/css" rel="stylesheet" href="css/style.css" />
 </head>
@@ -34,13 +41,19 @@
   <br>
   <div class="section white">
     <div class="row container">
+      <h6 class="flow-text">Countdown (last sumitted):
+      </h6>
+        <div class="center-align" id="clock">
+  
+        </div>
       <table class="responsive-table highlight" id="train-table">
         <thead>
           <tr>
             <th>Train Name</th>
             <th>Train Start Time</th>
-            <th>Destination</th>
             <th>Frequency</th>
+            <th>Destination</th>
+            <th>Minutes Until Next Train</th>
             <th>Next Train</th>
           </tr>
         </thead>
@@ -48,9 +61,12 @@
           <tr>
             <td>Indiana Express</td>
             <td>HHmm</td>
-            <td>Louisville, KY</td>
+            <td>mm</td>
+            <td>Florence, KY</td>
             <td>mm</td>
             <td>HH:mm</td>
+            <td>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -65,27 +81,27 @@
       <div class="row">
         <div class="input-field col s6">
           <i class="large material-icons prefix">train</i>
-          <input id="icon_train" type="text" class="validate trainName-input">
+          <input id="icon_train" type="text" class="validate trainName-input" name="trainName">
           <label class="active" for="trainName-input">Train Name</label>
         </div>
         <div class="input-field col s6">
           <i class="large material-icons prefix">access_time</i>
-          <input id="icon_access_time" type="text" class="timepicker trainStart-input">
-          <label for="trainStart-input">First Train Time in Military Time</label>
+          <input id="icon_access_time" type="number" class="validate trainStart-input" name="trainStart">
+          <label for="trainStart-input">Train Start Time in Military Time</label>
         </div>
       </div>
       <br>
       <br>
       <div class="row">
         <div class="input-field col s6">
-          <i class="large material-icons prefix">place</i>
-          <input id="icon_place" type="text" class="validate destination-input">
-          <label class="active" for="destination-input">Destination</label>
+          <i class="large material-icons prefix">av_timer</i>
+          <input id="icon_av_timer" type="number" class="validate frequency-input" name="frequencyMins">
+          <label class="active" for="frequency-input">Frequency in Minutes</label>
         </div>
         <div class="input-field col s6">
-          <i class="large material-icons prefix">av_timer</i>
-          <input id="icon_av_timer" type="number" class="validate frequency-input">
-          <label class="active" for="frequency-input">Frequency in Minutes</label>
+          <i class="large material-icons prefix">place</i>
+          <input id="icon_place" type="text" class="validate destination-input" name="destinationName">
+          <label class="active" for="destination-input">Destination</label>
         </div>
       </div>
     </form>
@@ -99,14 +115,22 @@
       </div>
     </div>
   </footer>
-  
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+          <h4>Modal Header</h4>
+          <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+      </div>
+
   <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
   <script src="js/setup.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/index.js"></script>
   <script>
-
-
     // document.addEventListener('DOMContentLoaded', function() {
     //
     // // The Firebase SDK is initialized and available here!

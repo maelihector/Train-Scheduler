@@ -17,6 +17,15 @@ th {
     background-color: rgb(4, 44, 19);
     color: rgba(255, 255, 255, 0.884);
 }
+h6 {
+    background-color: rgb(4, 44, 19);
+    color: rgba(255, 255, 255, 0.884);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    padding: 15px;
+    width: 20%;
+}
 
 td {
     text-align: center;
@@ -24,6 +33,15 @@ td {
 
 form {
     background-color: rgba(192, 192, 192, 0.26);
+}
+.btn {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    text-align: center;
+    background-color: rgb(4, 44, 19);
+    color: rgba(255, 255, 255, 0.884);
+
 }
 
 .parallax-container {
@@ -37,22 +55,22 @@ form {
 .page-footer {
     background-color: rgb(4, 44, 19);
 }
+
 .input-field .prefix {
     font-size: 4rem;
 }
 
-.input-field .prefix ~ input,
-.input-field .prefix ~ textarea,
-.input-field .prefix ~ label,
-.input-field .prefix ~ .validate ~ label,
-.input-field .prefix ~ .autocomplete-content {
-  margin-left: 4rem;
-  width: 92%;
-  width: calc(100% - 7rem);
+.input-field .prefix~input,
+.input-field .prefix~textarea,
+.input-field .prefix~label,
+.input-field .prefix~.validate~label,
+.input-field .prefix~.autocomplete-content {
+    margin-left: 4rem;
+    width: 92%;
+    width: calc(100% - 7rem);
 }
 
-.input-field .prefix ~ label {
+.input-field .prefix~label {
     margin-left: 4rem;
-  }
+}
 
-  
