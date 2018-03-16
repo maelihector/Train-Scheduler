@@ -5,13 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Train Scheduler</title>
-  
+
   <!--Import Google Icon Font-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
- 
+
   <!-- update the version number as needed -->
   <script defer src="/__/firebase/4.11.0/firebase-app.js"></script>
- 
+
   <!-- include only the Firebase features as you need -->
   <script defer src="/__/firebase/4.11.0/firebase-auth.js"></script>
   <script defer src="/__/firebase/4.11.0/firebase-database.js"></script>
@@ -49,6 +49,7 @@
             <th>Destination</th>
             <th>Frequency</th>
             <th>Next Train</th>
+            <th>Count Down Until Next Train</th>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +59,9 @@
             <td>Louisville, KY</td>
             <td>mm</td>
             <td>HH:mm</td>
+            <td>
+              <div id="clock"></div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -78,7 +82,7 @@
         <div class="input-field col s6">
           <i class="large material-icons prefix">access_time</i>
           <input id="icon_access_time" type="text" class="timepicker trainStart-input" name="trainStart">
-          <label for="trainStart-input">First Train Time in Military Time</label>
+          <label for="trainStart-input">Train Start Time in Military Time</label>
         </div>
       </div>
       <br>
