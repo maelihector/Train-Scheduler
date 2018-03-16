@@ -12,9 +12,11 @@ The UT Coding Boot Camp assignments, and is meant to demonstrate knowledge of Fi
 
 **The site uses [Firebase](https://firebase.google.com/) to host arrival and departure data, and is able to retrieve and manipulate the information with [Moment.js](http://momentjs.com/).**
 
-When users enter: Train Name, the time of the first Train Stop, the Frequency of the train, and their Destination, the app calculates the hours and/or minutes until the next train arrival, the exact time of the next train arrival, and has a countdown for the next train arrival of the last submitted train information.
+Users enter; Train Name, the time of the First Train stop, the Frequency of the train, and their Destination. 
 
-All form submits are stored in the Firebase database and is prepended to the form on the site for other users to view as well.
+The app then give information on the Next Train Arrival; the app calculates the hours and/or minutes until the next train, the exact time of the arrival, and has a countdown for the arrival of the last submitted train information.
+
+All inputted train information is stored in the Firebase database and is prepended to the form on the site for other users to view as well.
 
 ### Credits
 
