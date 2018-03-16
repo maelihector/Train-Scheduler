@@ -1,22 +1,8 @@
-$(function () {
-
-    // Have Train Start time pop up a clock where users can input time
-    $('.timepicker').pickatime({
-        default: 'now', // Set default time: 'now', '1:30AM', '16:30'
-        fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
-        twelvehour: false, // Use AM/PM or 24-hour format
-        donetext: 'OK', // text for done-button
-        cleartext: 'Clear', // text for clear-button
-        canceltext: 'Cancel', // Text for cancel-button
-        autoclose: false, // automatic close timepicker
-        ampmclickable: true, // make AM PM clickable
-        aftershow: function () {} //Function for after opening timepicker
-    });
-
+$(document).ready(() => {
     // Create variable for the firebase database
     var database = firebase.database();
 
-    // Add  new train information input to table????????
+    // Add  new train information input to table?.
     $("#add-train-btn").on("click", function (e) {
         // Stop page from refreshing
         e.preventDefault();
@@ -24,6 +10,10 @@ $(function () {
         // Grab user input and trim white space
         var trainName = $(".trainName-input").val().trim();
         var trainStart = $(".trainStart-input").val().trim();
+            if (trainStart.length != 4) {
+                alert ("Please enter four digits for 'Train Start Time in Military Time' Example: 0200");
+                return false
+            }
         var destinationName = $(".destination-input").val().trim();
         var frequencyMins = $(".frequency-input").val().trim();
 
@@ -86,39 +76,16 @@ $(function () {
         console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
 
         $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + trainStart + "</td><td>" +
-            frequencyMins + "</td><td>" + destinationName + "</td><td>" +  tMinutesTillTrain + "</td><td>" + moment(nextTrain).format("HH:mm") + "</td></tr>");
-
-
+            frequencyMins + "</td><td>" + destinationName + "</td><td>" + tMinutesTillTrain + "</td><td>" + moment(nextTrain).format("HH:mm") + "</td></tr>");
 
     });
-
-    // $("#add-train-btn").on("submit", function (e) {
-    //     e.preventDefault();
-
-    //     let form = $(this).closest("form");
-
-    //     let trainName = form.find("[name='trainName']").val();
-    //     let startTrain = form.find("[name='startTrain']").val();
-    //     let destinationName = form.find("[name='destinationName']").val();
-    //     let frequencyMins = form.find("[name='frequencyMins']").val();
-
-    //     let key = localStorage.userkey;
-
-    //     firebase.database().ref("trains/" + key).update({
-
-    //         name: trainName,
-    //         start: trainStart,
-    //         destination: destinationName,
-    //         frequency: frequencyMins
-    //     });
-    // })
 });
-
 
 // Add countdown till next train to table
 $("#add-train-btn").on("click", function (e) {
-    // Stop page from refreshing
-    e.preventDefault();
+
+        // Delete the countdown prior
+        $("#clock").empty();
 
     // Grab user input
     var trainName = $(".trainName-input").val().trim();
@@ -145,10 +112,9 @@ $("#add-train-btn").on("click", function (e) {
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
     console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
-    var $clock = $('#clock'),
+    var clock = $('#clock'),
         tMinutes = moment(tMinutesTillTrain, "minutes");
     console.log(tMinutes);
-    //eventTime = moment('27-11-2020 08:30:00', 'DD-MM-YYYY HH:mm:ss').unix(),
     currentTime = moment().unix(),
         console.log(currentTime);
     diffTime = tMinutesTillTrain * 60;
@@ -161,32 +127,27 @@ $("#add-train-btn").on("click", function (e) {
     if (diffTime > 0) {
 
         // Show clock
-        var $d = $('<div class="days" ></div>').appendTo($clock),
-            $h = $('<div class="hours" ></div>').appendTo($clock),
-            $m = $('<div class="minutes" ></div>').appendTo($clock),
-            $s = $('<div class="seconds" ></div>').appendTo($clock);
+        // ** I was unable to just just show the most recent input's countdown. **
+        var $h = $('<p class="hours" ></p>').appendTo(clock),
+            $m = $('<p class="minutes" ></p>').appendTo(clock),
+            $s = $('<p class="seconds" ></p>').appendTo(clock);
 
         setInterval(function () {
-
             duration = moment.duration(duration.asMilliseconds() - interval, 'milliseconds');
-            var d = moment.duration(duration).days(),
-                h = moment.duration(duration).hours(),
+            var h = moment.duration(duration).hours(),
                 m = moment.duration(duration).minutes(),
                 s = moment.duration(duration).seconds();
 
-            d = $.trim(d).length === 1 ? '0' + d : d;
             h = $.trim(h).length === 1 ? '0' + h : h;
             m = $.trim(m).length === 1 ? '0' + m : m;
             s = $.trim(s).length === 1 ? '0' + s : s;
 
             // show how many hours, minutes and seconds are left
-            $d.text(d);
             $h.text(h);
             $m.text(m);
             $s.text(s);
 
         }, interval);
-
     }
 
 });

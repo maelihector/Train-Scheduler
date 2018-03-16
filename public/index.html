@@ -41,6 +41,11 @@
   <br>
   <div class="section white">
     <div class="row container">
+      <h6 class="flow-text">Countdown (last sumitted):
+      </h6>
+        <div class="center-align" id="clock">
+  
+        </div>
       <table class="responsive-table highlight" id="train-table">
         <thead>
           <tr>
@@ -50,19 +55,17 @@
             <th>Destination</th>
             <th>Minutes Until Next Train</th>
             <th>Next Train</th>
-            <th>Count Down Until Next Train</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Indiana Express</td>
-            <td>HH:mm</td>
+            <td>HHmm</td>
             <td>mm</td>
-            <td>Louisville, KY</td>
+            <td>Florence, KY</td>
             <td>mm</td>
             <td>HH:mm</td>
-            <td id="clock">
-              <!-- <div id="clock"></div> -->
+            <td>
             </td>
           </tr>
         </tbody>
@@ -83,7 +86,7 @@
         </div>
         <div class="input-field col s6">
           <i class="large material-icons prefix">access_time</i>
-          <input id="icon_access_time" type="text" class="timepicker trainStart-input" name="trainStart">
+          <input id="icon_access_time" type="number" class="validate trainStart-input" name="trainStart">
           <label for="trainStart-input">Train Start Time in Military Time</label>
         </div>
       </div>
@@ -112,6 +115,16 @@
       </div>
     </div>
   </footer>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+          <h4>Modal Header</h4>
+          <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+      </div>
 
   <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
   <script src="js/setup.js"></script>
