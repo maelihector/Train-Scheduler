@@ -14,7 +14,7 @@ The UT Coding Boot Camp assignments, and is meant to demonstrate knowledge of Fi
 
 Users enter Train Name, the time of the First Train stop, the Frequency of the train, and their Destination. 
 
-The app then give information on the Next Train Arrival:
+The app then gives information on the Next Train Arrival:
 
 * The app calculates the hours and/or minutes until the next train. 
     
@@ -25,6 +25,7 @@ The app then give information on the Next Train Arrival:
 
 All inputted train information is stored in the Firebase database and is prepended to the form on the site for other users to view as well.
 
+- - -
 ### Credits
 
 [Materializecss](http://materializecss.com) was used for styling of the site.
