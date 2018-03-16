@@ -46,8 +46,9 @@
           <tr>
             <th>Train Name</th>
             <th>Train Start Time</th>
-            <th>Destination</th>
             <th>Frequency</th>
+            <th>Destination</th>
+            <th>Minutes Until Next Train</th>
             <th>Next Train</th>
             <th>Count Down Until Next Train</th>
           </tr>
@@ -56,11 +57,12 @@
           <tr>
             <td>Indiana Express</td>
             <td>HH:mm</td>
+            <td>mm</td>
             <td>Louisville, KY</td>
             <td>mm</td>
             <td>HH:mm</td>
-            <td>
-              <div id="clock"></div>
+            <td id="clock">
+              <!-- <div id="clock"></div> -->
             </td>
           </tr>
         </tbody>
@@ -89,14 +91,14 @@
       <br>
       <div class="row">
         <div class="input-field col s6">
-          <i class="large material-icons prefix">place</i>
-          <input id="icon_place" type="text" class="validate destination-input" name="destinationName">
-          <label class="active" for="destination-input">Destination</label>
-        </div>
-        <div class="input-field col s6">
           <i class="large material-icons prefix">av_timer</i>
           <input id="icon_av_timer" type="number" class="validate frequency-input" name="frequencyMins">
           <label class="active" for="frequency-input">Frequency in Minutes</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="large material-icons prefix">place</i>
+          <input id="icon_place" type="text" class="validate destination-input" name="destinationName">
+          <label class="active" for="destination-input">Destination</label>
         </div>
       </div>
     </form>
