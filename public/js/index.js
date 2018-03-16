@@ -1,6 +1,6 @@
 $(function () {
 
-    // for trainStart
+    // Have Train Start time pop up a clock where users can input time
     $('.timepicker').pickatime({
         default: 'now', // Set default time: 'now', '1:30AM', '16:30'
         fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
@@ -13,46 +13,48 @@ $(function () {
         aftershow: function () {} //Function for after opening timepicker
     });
 
-
-    // Create variable for the firebase variable
+    // Create variable for the firebase database
     var database = firebase.database();
 
-    // Add  new train information to table
+    // Add  new train information input to table????????
     $("#add-train-btn").on("click", function (e) {
         // Stop page from refreshing
         e.preventDefault();
-
-        // Grab user input
+        
+        // Grab user input and trim white space
         var trainName = $(".trainName-input").val().trim();
         var trainStart = $(".trainStart-input").val().trim();
         var destinationName = $(".destination-input").val().trim();
         var frequencyMins = $(".frequency-input").val().trim();
-
-        // Hold employee date temporarily 
+        
+        // Hold above data temporarily 
         var newTrain = {
             name: trainName,
             start: trainStart,
             destination: destinationName,
             frequency: frequencyMins
         };
-        // Uploads and replaces data in the databse
+        
+        // check what logs out
+        console.log(name);
+        console.log(start);
+        console.log(destination);
+        console.log(frequency);
+        
+        
+        // Upload and replace data in the firebase databse
         database.ref().push(newTrain);
-
-        // make sure vars work
-        // console.log(newTrain.name);
-        // console.log(newTrain.start);
-        // console.log(newTrain.destination);
-        // console.log(newTrain.frequency);
-
-        // clears all text-boxes
+        
+        // Clear all text-boxes after data is pushed
         $(".trainName-input").val("");
         $(".trainStart-input").val("");
         $(".destination-input").val("");
         $(".frequency-input").val("");
-
+        
     });
-
-    // Create Firebase event for adding Train info to the database and a row in the html when a user adds an entry
+    
+    // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+    // Create Firebase event for adding train info to the database and add a row in the <tbody> when a user submits a form
     database.ref().on("child_added", function (childSnapshot, prevChildKey) {
 
         console.log(childSnapshot.val()); //logs as object
@@ -62,11 +64,6 @@ $(function () {
         var trainStart = childSnapshot.val().start;
         var destinationName = childSnapshot.val().destination;
         var frequencyMins = childSnapshot.val().frequency;
-
-        // console.log(trainName);
-        // console.log(trainStart);
-        // console.log(destinationName);
-        // console.log(frequencyMins);
 
         // Calculate time remaining for next train
         // Change format of moment().format('MMMM Do YYYY, h:mm:ss a');
@@ -93,28 +90,28 @@ $(function () {
 
     });
 
-    $("#add-train-btn").on("submit", function (e) {
-        e.preventDefault();
+    // $("#add-train-btn").on("submit", function (e) {
+    //     e.preventDefault();
 
-        let form = $(this).closest("form");
+    //     let form = $(this).closest("form");
 
-        let trainName = form.find("[name='trainName']").val();
-        let startTrain = form.find("[name='startTrain']").val();
-        let destinationName = form.find("[name='destinationName']").val();
-        let frequencyMins = form.find("[name='frequencyMins']").val();
+    //     let trainName = form.find("[name='trainName']").val();
+    //     let startTrain = form.find("[name='startTrain']").val();
+    //     let destinationName = form.find("[name='destinationName']").val();
+    //     let frequencyMins = form.find("[name='frequencyMins']").val();
 
-        let key = localStorage.userkey;
+    //     let key = localStorage.userkey;
 
-        firebase.database().ref("trains/" + key).update({
+    //     firebase.database().ref("trains/" + key).update({
 
-            name: trainName,
-            start: trainStart,
-            destination: destinationName,
-            frequency: frequencyMins
-        });
-    })
-
+    //         name: trainName,
+    //         start: trainStart,
+    //         destination: destinationName,
+    //         frequency: frequencyMins
+    //     });
+    // })
 });
+
 $("#add-train-btn").on("click", function (e) {
     // Stop page from refreshing
     e.preventDefault();
@@ -137,19 +134,19 @@ $("#add-train-btn").on("click", function (e) {
     var tRemainder = diffTime % frequencyMins;
     console.log(tRemainder);
 
-        // Minute Until Train
-        var tMinutesTillTrain = frequencyMins - tRemainder;
-        console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+    // Minute Until Train
+    var tMinutesTillTrain = frequencyMins - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
     var $clock = $('#clock'),
-        tMinutes = moment(tMinutesTillTrain, "minutes");
+    tMinutes = moment(tMinutesTillTrain, "minutes");
     console.log(tMinutes);
     //eventTime = moment('27-11-2020 08:30:00', 'DD-MM-YYYY HH:mm:ss').unix(),
     currentTime = moment().unix(),
-   
-        console.log(currentTime);
+
+    console.log(currentTime);
     diffTime = tMinutesTillTrain * 60;
-        console.log(diffTime);
+    console.log(diffTime);
     duration = moment.duration(diffTime * 1000, 'milliseconds'),
         console.log(duration);
     interval = 1000;
@@ -158,8 +155,6 @@ $("#add-train-btn").on("click", function (e) {
     if (diffTime > 0) {
 
         // Show clock
-        // $clock.show();
-
         var $d = $('<div class="days" ></div>').appendTo($clock),
             $h = $('<div class="hours" ></div>').appendTo($clock),
             $m = $('<div class="minutes" ></div>').appendTo($clock),
