@@ -2,7 +2,7 @@ $(document).ready(() => {
     // Create variable for the firebase database
     var database = firebase.database();
 
-    // Add  new train information input to table?.
+    // Add  new train information input to table.
     $("#add-train-btn").on("click", function (e) {
         // Stop page from refreshing
         e.preventDefault();
@@ -10,10 +10,10 @@ $(document).ready(() => {
         // Grab user input and trim white space
         var trainName = $(".trainName-input").val().trim();
         var trainStart = $(".trainStart-input").val().trim();
-            if (trainStart.length != 4) {
-                alert ("Please enter four digits for 'Train Start Time in Military Time' Example: 0200");
-                return false
-            }
+        if (trainStart.length != 4) {
+            alert("Please enter four digits for 'Train Start Time in Military Time' Example: 0200");
+            return false
+        }
         var destinationName = $(".destination-input").val().trim();
         var frequencyMins = $(".frequency-input").val().trim();
 
@@ -24,13 +24,6 @@ $(document).ready(() => {
             destination: destinationName,
             frequency: frequencyMins
         };
-
-        // check what logs out
-        console.log(trainName);
-        console.log(trainStart);
-        console.log(destinationName);
-        console.log(frequencyMins);
-
 
         // Upload and replace data in the firebase databse
         database.ref().push(newTrain);
@@ -43,11 +36,8 @@ $(document).ready(() => {
 
     });
 
-    // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-    // Create Firebase event for adding train info to the database and add a row in the <tbody> when a user submits a form
-    database.ref().on("child_added", function (childSnapshot, prevChildKey) {
-
-        console.log(childSnapshot.val()); //logs as object
+    // Create Firebase event for adding train info to the database and add a row in the <tbody> when a user submits a new train
+    database.ref().on("child_added", function (childSnapshot) {
 
         // Store everything into a var
         var trainName = childSnapshot.val().name;
@@ -68,15 +58,38 @@ $(document).ready(() => {
         // Time apart (remainder)
         var tRemainder = diffTime % frequencyMins;
         console.log(tRemainder);
-        // Minute Until Train
+        // Minutes Until Train
         var tMinutesTillTrain = frequencyMins - tRemainder;
         console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
         // Next Train
         var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-        console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
+        console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+        
+        // Convert military time to standard time
+        let militaryTime = moment(nextTrain).format("HH:mm");
+
+        militaryTime = militaryTime.split(':'); // convert to array
+
+        // fetch
+        var hours = Number(militaryTime[0]);
+        var minutes = Number(militaryTime[1]);
+
+        // calculate
+        var standardTime;
+
+        if (hours > 0 && hours <= 12) {
+            standardTime = "" + hours;
+        } else if (hours > 12) {
+            standardTime = "" + (hours - 12);
+        } else if (hours == 0) {
+            standardTime = "12";
+        }
+
+        standardTime += (minutes < 10) ? ":0" + minutes : ":" + minutes; // get minutes
+        standardTime += (hours >= 12) ? " P.M." : " A.M."; // get AM/PM
 
         $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + trainStart + "</td><td>" +
-            frequencyMins + "</td><td>" + destinationName + "</td><td>" + tMinutesTillTrain + "</td><td>" + moment(nextTrain).format("HH:mm") + "</td></tr>");
+            frequencyMins + "</td><td>" + destinationName + "</td><td>" + tMinutesTillTrain + "</td><td>" + standardTime + "</td></tr>");
 
     });
 });
@@ -84,8 +97,8 @@ $(document).ready(() => {
 // Add countdown till next train to table
 $("#add-train-btn").on("click", function (e) {
 
-        // Delete the countdown prior
-        $("#clock").empty();
+    // Delete the countdown prior
+    $("#clock").empty();
 
     // Grab user input
     var trainName = $(".trainName-input").val().trim();
