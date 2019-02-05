@@ -36,10 +36,11 @@ $(document).ready(() => {
 
     });
 
-    // Create Firebase event for adding train info to the database and add a row in the <tbody> when a user submits a new train
-    database.ref().on("child_added", function (childSnapshot) {
+    // retrieve database train data from firebase and dump on DOM table
+    // 'child_added' is triggered once for each existing child and then again every time a new child is added
+    database.ref().on("child_added", function (childSnapshot, prevChildKey) {
 
-        // Store everything into a var
+        // grab important values and save into vars
         var trainName = childSnapshot.val().name;
         var trainStart = childSnapshot.val().start;
         var destinationName = childSnapshot.val().destination;
@@ -55,7 +56,6 @@ $(document).ready(() => {
         var tMinutesTillTrain = frequencyMins - tRemainder;
         // Next Train
         var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-
         // Convert military time to standard time
         let militaryTime = moment(nextTrain).format("HH:mm:ss");
 
@@ -79,9 +79,41 @@ $(document).ready(() => {
         standardTime += (minutes < 10) ? ":0" + minutes : ":" + minutes; // get minutes
         standardTime += (hours >= 12) ? " P.M." : " A.M."; // get AM/PM
 
-        // prepend to table
-        $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td>" + tMinutesTillTrain + "</td><td>" + standardTime + "</td></tr>");
+        // prepend updated time to table
+        $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain'>" + tMinutesTillTrain + "</td><td>" + standardTime + "</td></tr>");
+        
+        countDown(tMinutesTillTrain);
 
     });
+
+    // function to countdown minutes until next train and to update for next train arrival
+    function countDown(tMinutesTillTrain) {
+
+        let minutesToBeReplaced = $('#minutesTillTrain');
+        let eachMinutesToBeReplaced = minutesToBeReplaced[0].innerText;
+        console.log(eachMinutesToBeReplaced);
+
+
+        // countdown
+        var minutesRemaining = tMinutesTillTrain * 60;
+        var duration = moment.duration(minutesRemaining * 1000, 'milliseconds');
+        var interval = 40000;
+
+        if (minutesRemaining > 0) {
+            setInterval(function () {
+
+                duration = moment.duration(duration.asMilliseconds() - interval, 'milliseconds');
+                var m = moment.duration(duration).minutes();
+                var s = moment.duration(duration).seconds();
+
+                tMinutesTillTrain = m;
+                console.log(tMinutesTillTrain);
+                console.log(eachMinutesToBeReplaced);
+                minutesToBeReplaced.empty();
+                minutesToBeReplaced.prepend(tMinutesTillTrain);
+
+            }, interval)
+        }
+    }
 
 });
