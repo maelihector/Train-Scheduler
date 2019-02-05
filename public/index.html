@@ -30,7 +30,7 @@
 </head>
 
 <body>
-  <h2 class="header center-align">Train Scheduler</h2>
+  <h2 class="header center-align">Train Arrivals</h2>
   <div class="parallax-container">
     <div class="parallax">
       <img src="images/background3.jpg">
@@ -41,28 +41,21 @@
   <br>
   <div class="section white">
     <div class="row container">
-      <h6 class="flow-text">Countdown (last sumitted):
-      </h6>
-        <div class="center-align" id="clock">
-  
-        </div>
       <table class="responsive-table highlight" id="train-table">
         <thead>
           <tr>
             <th>Train Name</th>
-            <th>Train Start Time</th>
-            <th>Frequency</th>
             <th>Destination</th>
-            <th>Minutes Until Next Train</th>
-            <th>Next Train</th>
+            <th>Frequency (mins)</th>
+            <th>Minutes Away</th>
+            <th>Next Arrival</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Indiana Express</td>
-            <td>HHmm</td>
-            <td>mm</td>
             <td>Florence, KY</td>
+            <td>mm</td>
             <td>mm</td>
             <td>HH:mm</td>
             <td>
@@ -75,6 +68,7 @@
   <br>
   <br>
   <div class="row container">
+    <h4 class="header center-align">Add Another Train</h4>
     <!-- User Enters information here -->
     <form class="col s12">
       <br>
@@ -130,28 +124,6 @@
   <script src="js/setup.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/index.js"></script>
-  <script>
-    // document.addEventListener('DOMContentLoaded', function() {
-    //
-    // // The Firebase SDK is initialized and available here!
-    //
-    // firebase.auth().onAuthStateChanged(user => { });
-    // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-    // firebase.messaging().requestPermission().then(() => { });
-    // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-    //
-    //
-
-    //   try {
-    //     let app = firebase.app();
-    //     let features = ['auth', 'database'].filter(feature => typeof app[feature] === 'function');
-    //     document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-    //   } catch (e) {
-    //     console.error(e);
-    //     document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-    //   }
-    // });
-  </script>
 </body>
 
 </html>
