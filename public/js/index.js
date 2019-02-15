@@ -10,11 +10,17 @@ $(document).ready(() => {
 
         // Grab user input and trim white space
         var trainName = $(".trainName-input").val().trim();
+
+        // check for duplicate train name
+        if (checkDuplicateTrainNames(trainName) === true) {
+            return false;
+        }
+
         var trainStart = $(".trainStart-input").val().trim();
         // Make sure users input correct military time format
         if (trainStart.length != 4 || trainStart > 2359) {
             alert("Please enter four digits under 2359 for 'Train Start Time in Military Time' Like 2359 for 11:59.PM., or 0000 for 12:00 A.M.");
-            return false
+            return false;
         }
         var destinationName = $(".destination-input").val().trim();
         var frequencyMins = $(".frequency-input").val().trim();
@@ -37,6 +43,26 @@ $(document).ready(() => {
         $(".frequency-input").val("");
 
     });
+
+
+    function checkDuplicateTrainNames(trainName) {
+        // check for duplicate trains
+        var isDuplicate;
+        database.ref().once('value', function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var childData = childSnapshot.val().name;
+                if (trainName === childData) {
+                    alert(trainName + " already exist in our database. If you want to submit anayway, try adding a unique number to the end of the train's name.");
+                    isDuplicate = true;
+                    return isDuplicate;
+                } else {
+                    isDuplicate = false;
+                    return isDuplicate;
+                }
+            });
+        });
+        return isDuplicate;
+    }
 
     // retrieve database train data from firebase and dump on DOM table
     // 'child_added' is triggered once for each existing child and then again every time a new child is added
@@ -149,22 +175,22 @@ $(document).ready(() => {
         var arrivalTimeHours = Number(arrivalTimeStringArray[0]);
         var minutesAndMeridian = arrivalTimeStringArray[1];
         var minutesMeridianSplit = minutesAndMeridian.split(" ");
-        var arrivalTimeMinutes = Number(minutesMeridianSplit[0]) + 1;  // 1 is added so it can match current and update the arrival time, otherwise current time will always be one minute ahead due to the (1 minute long) arrival message.
+        var arrivalTimeMinutes = Number(minutesMeridianSplit[0]) + 1; // 1 is added so it can match current and update the arrival time, otherwise current time will always be one minute ahead due to the (1 minute long) arrival message.
         var arrivalTimeMeridian = minutesMeridianSplit[1];
-        
+
         // add zero in front of minutes if minutes < 10 in order to be able to match times, else arrival time can be 4:5 instead of 4:05. It was changed to a number initially so we could add the 1 minute that makes time matching possible.
         if (arrivalTimeMinutes < 10) {
             arrivalTimeMinutes = '0' + arrivalTimeMinutes;
         }
-        
+
         var domArrivalTime = arrivalTimeHours + ":" + arrivalTimeMinutes; // create string that could match currentTime string
-        
+
         // checking against current time is necessary since more than one train can have same frequency mins listed, but with different arrival times
         var currentTime = getCurrentTime();
-        
+
         // if arrival time and current time match, then update IS needed.
         if (domArrivalTime === currentTime) {
-            
+
             // convert frequency minutes to a number to be able to add to arrival minutes
             frequencyMins = Number(frequencyMins);
             // convert arrivalTimeMinutes back to a Number to subtract the 1 minute added when checking against current time
