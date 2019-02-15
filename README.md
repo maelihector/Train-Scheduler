@@ -1,31 +1,33 @@
-# Train-Scheduler
-
+# Train Arrivals
 ## Using Firebase and Moment.js.
 
 ### What is this?
 
-This Train Scheduler site is a project that I built as one of 
-The UT Coding Boot Camp assignments, and is meant to demonstrate knowledge of Firebase and Moment.js. 
+The Train Arrivals application is a way to determine when a specific train arrives to our hypothetical Austin Train Station by either having a user check if the train already exists on the application, or by submitting a new train's name, start time (or last known train arrival), frequency, and destination to the application. The app will then post the train's next arrival time, plus a minute countdown until its next arrival (you know, in case you're bad at math or aren't good at managing your time well). 
 
 - - -
 ### What does this do?
 
-**The site uses [Firebase](https://firebase.google.com/) to host arrival and departure data, and is able to retrieve and manipulate the information with [Moment.js](http://momentjs.com/).**
+**The application incorporates [Firebase](https://firebase.google.com/)  to host arrival and departure data, it  retrieves and manipulates the data with [Moment.js](http://momentjs.com/), and provides up-to-date information about various trains; namely their arrival time and a minute countdown until their next arrival.**
 
-Users enter Train Name, the time of the First Train stop, the Frequency of the train, and their Destination. 
+## How does it work?
 
-The app then gives information on the Next Train Arrival:
+To submit a new train, users input a unique train name, the time it started running (or its last known arrival), its frequency in minutes, and its destination on a form at the bottom of the page and click the submit button.
 
-* The app calculates the hours and/or minutes until the next train. 
-    
-* The exact time of the arrival.
-
-* Shows a countdown for the arrival of the last submitted train information.
-
-
-All inputted train information is stored in the Firebase database and is prepended to the form on the site for other users to view as well.
-
+All newly submitted train information is stored in the Firebase database and is prepended to the train list on the site in real-time for other users to view as well. 
 - - -
+
+## Technologies Used
+
+1. HTML
+2. [Materializecss](http://materializecss.com) 
+3. CSS
+4. JavaScript
+5. [jQuery](https://jquery.com/)
+6.  [Firebase](https://firebase.google.com/)
+7. [Moment.js](http://momentjs.com/)
+
+
 ### Credits
 
-[Materializecss](http://materializecss.com) was used for styling of the site.
+> Written with  [StackEdit](https://stackedit.io/).
