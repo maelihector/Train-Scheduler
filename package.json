@@ -1,0 +1,23 @@
+{
+  "name": "train-scheduler",
+  "version": "1.0.0",
+  "description": "Firebase App with Moment.js.",
+  "main": "index.js",
+  "dependencies": {
+    "firebase-tools": "^6.9.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maelihector/Train-Scheduler.git"
+  },
+  "author": "Maeli Hector",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maelihector/Train-Scheduler/issues"
+  },
+  "homepage": "https://github.com/maelihector/Train-Scheduler#readme"
+}
