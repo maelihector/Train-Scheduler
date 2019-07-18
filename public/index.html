@@ -18,8 +18,8 @@
 
   <!-- initialize the SDK after all desired features are loaded -->
   <script defer src="/__/firebase/init.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
   <!-- Moment.js Reference -->
   <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
@@ -30,19 +30,18 @@
 </head>
 
 <body>
-  <h2 class="header center-align">Austin Train Arrivals</h2>
-  <div class="parallax-container">
-    <div class="parallax">
-      <img src="images/background3.jpg">
-    </div>
+  <h2 class="header center-align">Train Arrivals</h2>
+
+  <div>
+    <img src="images/background3.jpg">
   </div>
+
   <br>
   <br>
   <br>
-  <div class="center-align" id="clock"></div>
   <div class="section white">
     <div class="row container">
-      <table class="responsive-table highlight" id="train-table">
+      <table class="responsive-table striped" id="train-table">
         <thead>
           <tr>
             <th>Train Name</th>
@@ -90,13 +89,15 @@
         </div>
       </div>
     </form>
-    <button id="add-train-btn" class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+    <div class="center">
+      <button id="add-train-btn" class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+    </div>
   </div>
   <br>
   <footer class="page-footer">
     <div class="footer-copyright">
       <div class="container center-align">
-        © 2018 Copyright Text
+        © 2019 Copyright Maeli Hector
       </div>
     </div>
   </footer>

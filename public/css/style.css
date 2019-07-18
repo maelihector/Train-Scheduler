@@ -8,6 +8,11 @@ main {
     flex: 1 0 auto;
 }
 
+img {
+  height: 250px;
+  width: 100%;
+}
+
 i {
     color: rgba(12, 12, 12, 0.911);
 }
@@ -44,14 +49,6 @@ form {
 
 }
 
-.parallax-container {
-    height: 250px;
-}
-
-.parallax-container .parallax img {
-    display: block;
-}
-
 .page-footer {
     background-color: rgb(4, 44, 19);
 }
@@ -74,3 +71,6 @@ form {
     margin-left: 4rem;
 }
 
+.center {
+  text-align: center;
+}
