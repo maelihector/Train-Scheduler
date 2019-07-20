@@ -5,18 +5,27 @@ $(document).ready(() => {
 
   // Check for duplicate train names
   function checkDuplicateTrainNames(trainName) {
-    var trainNameStr = trainName.replace(/ +/g, "");
-    // check for duplicate trains
+    // Create is Duplicate variable
     var isDuplicate;
+
     // grab database train data
     database.ref().once('value', function (snapshot) {
       // loop through each
       snapshot.forEach(function (childSnapshot) {
-        // grab each data base train name
+        // Fetch each database train name
         var childData = childSnapshot.val().name;
-        // if new input train name === database train name
-        if (trainName === childData || trainNameStr === childData) {
-          alert(trainName + " already exist in our database. If you want to submit anayway, try adding a unique number to the end of your train's name.");
+
+        // Remove whitespace from inbetween words and convert to lower case
+        var childDataStr = childData.replace(/ +/g, "");
+        var childDataLowerCase = childDataStr.toLowerCase();
+
+        // Remove whitespace from inbetween words and convert to lower case
+        var trainNameStr = trainName.replace(/ +/g, "");
+        var trainNameLowerCase = trainNameStr.toLowerCase();
+
+        // If new input train name === database train name
+        if (trainNameLowerCase === childDataLowerCase) {
+          alert(trainName + " is too similar to " + childData + ", which already exists in our database. If you want to submit " + trainName + " anayway, try adding a unique number to the end of the name.");
           isDuplicate = true;
           return isDuplicate;
         } else {
