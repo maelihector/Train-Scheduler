@@ -1,50 +1,7 @@
 $(document).ready(() => {
 
-  var database = firebase.database(); // Create variable for the firebase database
-
-  // Add  new train information input to table.
-  $("#add-train-btn").on("click", function (e) {
-
-    // Stop page from refreshing
-    e.preventDefault();
-
-    // Grab user input and trim white space
-    var trainName = $(".trainName-input").val().trim();
-    // check and prevent duplicate train names
-    if (checkDuplicateTrainNames(trainName) === true) {
-      return false;
-    }
-
-    var trainStart = $(".trainStart-input").val().trim();
-    // Make sure users input correct military time format
-    var trainStartHours = trainStart.slice(0, 2);
-    var trainStartMins = trainStart.slice(-2);
-    if (trainStart.length != 4 || parseInt(trainStartHours) > 23 || parseInt(trainStartMins) > 59) {
-      alert("Please enter four digits, the first two between 00 and 23, and the last two digits between 00 and 59. For example 0000 for 12:00 A.M. or 2359 for 11:59 P.M.");
-      return false;
-    }
-
-    var destinationName = $(".destination-input").val().trim();
-    var frequencyMins = $(".frequency-input").val().trim();
-
-    // Hold above data temporarily 
-    var newTrain = {
-      name: trainName,
-      start: trainStart,
-      destination: destinationName,
-      frequency: frequencyMins
-    };
-
-    // Upload data to the firebase databse
-    database.ref().push(newTrain);
-
-    // Clear all text-boxes after data is pushed
-    $(".trainName-input").val("");
-    $(".trainStart-input").val("");
-    $(".destination-input").val("");
-    $(".frequency-input").val("");
-
-  });
+  // Create variable for the firebase database
+  var database = firebase.database();
 
   // Check for duplicate train names
   function checkDuplicateTrainNames(trainName) {
@@ -71,37 +28,33 @@ $(document).ready(() => {
     return isDuplicate;
   }
 
-  // Retrieve database train data from firebase
-  // 'child_added' is triggered once for each existing child and then again every time a new child is added
-  database.ref().on("child_added", function (childSnapshot) {
+  // Function that calculates minutes until next train arrival
+  function calculateTMinutesTillTrain(trainStart, frequencyMins) {
+    // Fetch correct trainStart time format
+    var trainStartFormat = moment(trainStart, "HH:mm").subtract(1, "years");
+    // Fetch difference between the times
+    var diffTime = moment().diff(moment(trainStartFormat), "minutes");
+    // Calculate time apart (remainder)
+    var tRemainder = diffTime % frequencyMins;
+    // Calculate minutes until train arrives
+    var tMinutesTillTrain = frequencyMins - tRemainder;
 
-    // Grab important values and save into variables
-    var trainName = childSnapshot.val().name;
-    var trainStart = childSnapshot.val().start;
-    var destinationName = childSnapshot.val().destination;
-    var frequencyMins = childSnapshot.val().frequency;
+    return tMinutesTillTrain;
+  }
 
-    // Calculate train arrival of each train
-    var timeOfNextTrainTMins = calculateTrainArrivalTime(trainStart, frequencyMins);
+  // Function that calculates next train arrival time
+  function calculateTrainArrivalTime(tMinutesTillTrain) {
 
-    // Since calculateTrainArrival also updates tMins until next train, we return both train time and tMins in one string and have to split it
-    var splitTimeofNextTrainTMins = timeOfNextTrainTMins.split("-");
-    var timeOfNextTrain = splitTimeofNextTrainTMins[0];
-    var tMinutesTillTrain = splitTimeofNextTrainTMins[1];
+    // Fetch Next Train Arrival
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    // Convert to standard time
+    var timeOfNextTrain = convertToStandard(nextTrain);
 
-    // Create whitespace-free train name to add as attribute to train to update train information appropriately
-    var spaceFreeTrainName = trainName.replace(/ +/g, "");
+    return timeOfNextTrain;
+  }
 
-    // Prepend updated time to table
-    $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain'>" + tMinutesTillTrain + "</td><td id='arrivalTime" + spaceFreeTrainName + "'>" + timeOfNextTrain + "</td></tr>");
-
-    // call function to update minutes countdown until next train arrives 
-    minuteCountDown(spaceFreeTrainName, tMinutesTillTrain, frequencyMins, trainStart);
-
-  });
-
-  // Function that updates DOM with minutes until next train
-  function minuteCountDown(trainName, tMinutesTillTrain, frequencyMins, trainStart) {
+  // Update DOM with minutes until next train
+  function minuteCountDown(trainName, tMinutesTillTrain, frequencyMins) {
     var minutesToBeReplaced = $('#minutesTillTrain');
     // Get current time seconds
     var beginningSeconds = moment().format('ss');
@@ -116,7 +69,7 @@ $(document).ready(() => {
     run();
 
     function increment() {
-      // Decrease seconds by one.
+      // Increase seconds by one.
       beginningSeconds++;
       // When seconds reach 60...
       if (beginningSeconds === 60) {
@@ -126,8 +79,6 @@ $(document).ready(() => {
         if (tMinutesTillTrain === 'arrived') {
           // reset tMinutesTillTrain to frequency minutes
           tMinutesTillTrain = frequencyMins;
-          // Call function that updates train arrival time to update DOM
-          updateArrivalTime(trainName, frequencyMins, trainStart);
         }
         //  Decrease tMinutesTillTrain by one
         tMinutesTillTrain--;
@@ -138,45 +89,15 @@ $(document).ready(() => {
       if (tMinutesTillTrain === 0) {
         // show 'arrived' for one minute before resetting to frequency minutes
         tMinutesTillTrain = 'arrived';
-        //  Update DOM with correct minutes 
         minutesToBeReplaced.text(tMinutesTillTrain);
+        // Fetch time of next train arrival (since last arrival is now, tMinutesTillNextTrain === frequencyMins)
+        var nextTrain = calculateTrainArrivalTime(frequencyMins);
+        // Find correct train to update
+        var trainId = $('#arrivalTime' + trainName);
+        // Update DOM with updated next arrival time
+        trainId.text(nextTrain);
       }
     }
-  }
-
-  // Function that takes train name and frequency minutes as parameters and searches DOM for train arrival time to be replaced
-  function updateArrivalTime(trainName, frequencyMins, trainStart) {
-
-    // Find train to update
-    var trainId = $('#arrivalTime' + trainName);
-
-    // Calculate train arrival of each train
-    var timeOfNextTrainTMins = calculateTrainArrivalTime(trainStart, frequencyMins);
-
-    // Since calculateTrainArrival also updates tMins until next train, we return both train time and tMins in one string and have to split it
-    var splitTimeofNextTrainTMins = timeOfNextTrainTMins.split("-");
-    var timeOfNextTrain = splitTimeofNextTrainTMins[0];
-
-    // Update DOM with updated arrival time
-    trainId.text(timeOfNextTrain);
-  }
-
-  // Function that calculates train arrivals at page load and when a train has arrived and needs to be re-calculated
-  function calculateTrainArrivalTime(trainStart, frequencyMins) {
-
-    var trainStartFormat = moment(trainStart, "HH:mm").subtract(1, "years");
-    // Difference between the times
-    var diffTime = moment().diff(moment(trainStartFormat), "minutes");
-    // Time apart (remainder)
-    var tRemainder = diffTime % frequencyMins;
-    // Minutes Until Train
-    var tMinutesTillTrain = frequencyMins - tRemainder;
-    // Next Train
-    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    // Convert to standard time
-    var timeOfNextTrain = convertToStandard(nextTrain);
-
-    return timeOfNextTrain + "-" + tMinutesTillTrain;
   }
 
   // Function that converts military time to standard time
@@ -206,5 +127,108 @@ $(document).ready(() => {
     return standardTime;
   }
 
+  // Function that takes user input train time and converts it to military in order to use it with Moment.js Called by: $("#add-train-btn").on("click"..
+  function convertToMilitary(trainStartInput) {
+    console.log(trainStartInput);
+    // Convert input time to military time format
+    // Fetch hours, minutes and meridian
+    var trainStartHours = trainStartInput.slice(0, 2);
+    var trainStartMinutes = trainStartInput.slice(3, 5);
+    var trainStartMeridian = trainStartInput.slice(6, 8);
+
+    console.log(trainStartHours, trainStartMinutes, trainStartMeridian);
+
+    // If meridian is PM and less than 12, add 12 to convert to military hours
+    if (trainStartMeridian === "PM" && Number(trainStartHours) < 12) {
+      console.log(trainStartHours);
+      trainStartHours = Number(trainStartHours);
+      console.log(trainStartHours);
+      trainStartHours += 12;
+      console.log(trainStartHours);
+    }
+
+    // If 12 AM, change to '00' military hours
+    if (trainStartMeridian === "AM" && Number(trainStartHours) === 12) {
+      trainStartHours = "00";
+      console.log(trainStartHours);
+    }
+
+    // Moment.js takes strings
+    trainStartMinutes.toString;
+
+    console.log(trainStartHours, trainStartMinutes);
+
+    var trainStart = trainStartHours + trainStartMinutes;
+
+    console.log(trainStart);
+
+    return trainStart;
+  }
+
+  // Add  new train information input to table.
+  $("#add-train-btn").on("click", function (e) {
+
+    // Stop page from refreshing
+    e.preventDefault();
+
+    // Grab user input and trim white space
+    var trainName = $(".trainName-input").val().trim();
+    // check and prevent duplicate train names
+    if (checkDuplicateTrainNames(trainName) === true) {
+      return false;
+    }
+
+    var trainStartInput = $(".trainStart-input").val().trim();
+    // Convert input to military time in order to calculate next train arrival time when needed
+    var trainStart = convertToMilitary(trainStartInput);
+
+    var destinationName = $(".destination-input").val().trim();
+    var frequencyMins = $(".frequency-input").val().trim();
+
+    // Hold above data temporarily 
+    var newTrain = {
+      name: trainName,
+      start: trainStart,
+      destination: destinationName,
+      frequency: frequencyMins
+    };
+
+    // Upload data to the firebase databse
+    database.ref().push(newTrain);
+
+    // Clear all text-boxes after data is pushed
+    $(".trainName-input").val("");
+    $(".trainStart-input").val("");
+    $(".destination-input").val("");
+    $(".frequency-input").val("");
+
+  });
+
+  // Retrieve database train data from firebase
+  // 'child_added' is triggered once for each existing child and then again every time a new child is added
+  database.ref().on("child_added", function (childSnapshot) {
+
+    // Grab important values and save into variables
+    var trainName = childSnapshot.val().name;
+    var trainStart = childSnapshot.val().start;
+    var destinationName = childSnapshot.val().destination;
+    var frequencyMins = childSnapshot.val().frequency;
+
+    // Fetch minutes until next train
+    var tMinutesTillTrain = calculateTMinutesTillTrain(trainStart, frequencyMins);
+
+    // Fetch time of next train arrival
+    var timeOfNextTrain = calculateTrainArrivalTime(tMinutesTillTrain);
+
+    // Create whitespace-free train name to add as attribute to update train information appropriately
+    var spaceFreeTrainName = trainName.replace(/ +/g, "");
+
+    // Prepend train to table
+    $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain'>" + tMinutesTillTrain + "</td><td id='arrivalTime" + spaceFreeTrainName + "'>" + timeOfNextTrain + "</td></tr>");
+
+    // Call function to update minutes countdown until next train arrives 
+    minuteCountDown(spaceFreeTrainName, tMinutesTillTrain, frequencyMins);
+
+  });
 
 });

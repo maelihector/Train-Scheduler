@@ -9,24 +9,23 @@
   <!--Import Google Icon Font-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <!-- update the version number as needed -->
-  <script defer src="/__/firebase/4.11.0/firebase-app.js"></script>
-
-  <!-- include only the Firebase features as you need -->
-  <script defer src="/__/firebase/4.11.0/firebase-auth.js"></script>
-  <script defer src="/__/firebase/4.11.0/firebase-database.js"></script>
-
-  <!-- initialize the SDK after all desired features are loaded -->
-  <script defer src="/__/firebase/init.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Firebase Reference -->
+  <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
+  <!-- Include Firebase features needed -->
+  <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js"></script>
   <!-- Moment.js Reference -->
   <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+  <!-- Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.js"></script>
 
-  <!-- style links -->
-  <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+  <!-- Materialize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css" />
+  <!-- Style links -->
   <link type="text/css" rel="stylesheet" href="css/style.css" />
+
+
 </head>
 
 <body>
@@ -70,8 +69,8 @@
         </div>
         <div class="input-field col s6">
           <i class="large material-icons prefix">access_time</i>
-          <input id="icon_access_time" type="number" class="validate trainStart-input" name="trainStart">
-          <label for="trainStart-input">Train Start Time (or Last Arrival) in Military Time</label>
+          <input id="icon_access_time" type="text" class="timepicker validate trainStart-input" name="trainStart">
+          <label for="trainStart-input">Train Start Time (or last known arrival time)</label>
         </div>
       </div>
       <br>
@@ -102,10 +101,14 @@
     </div>
   </footer>
 
-  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <!-- javascript -->
   <script src="js/setup.js"></script>
-  <script src="js/materialize.js"></script>
   <script src="js/index.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('.timepicker').timepicker();
+    });
+  </script>
 </body>
 
 </html>
