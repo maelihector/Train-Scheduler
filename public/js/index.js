@@ -219,10 +219,10 @@ $(document).ready(() => {
 
     // Grab important values and save into variables
     var trainName = childSnapshot.val().name;
+    var trainKey = childSnapshot.ref.key;
     var trainStart = childSnapshot.val().start;
     var destinationName = childSnapshot.val().destination;
     var frequencyMins = childSnapshot.val().frequency;
-
     // Fetch minutes until next train
     var tMinutesTillTrain = calculateTMinutesTillTrain(trainStart, frequencyMins);
 
@@ -232,12 +232,46 @@ $(document).ready(() => {
     // Create whitespace-free train name to add as attribute to update train information appropriately
     var spaceFreeTrainName = trainName.replace(/ +/g, "");
 
+    // Create 'Update' and 'Remove' btns
+    var editBtn = '<i id="edit-train" class="small material-icons">edit</i>';
+    var removeBtn = '<i id="delete-train" class="small material-icons">delete</i>';
+
     // Prepend train to table
-    $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain'>" + tMinutesTillTrain + "</td><td id='arrivalTime" + spaceFreeTrainName + "'>" + timeOfNextTrain + "</td></tr>");
+    $("#train-table > tbody").prepend("<tr id=" + trainKey + "><td class='center'>" + editBtn + removeBtn + "</td><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain'>" + tMinutesTillTrain + "</td><td id='arrivalTime" + spaceFreeTrainName + "'>" + timeOfNextTrain + "</td></tr>");
 
     // Call function to update minutes countdown until next train arrives 
     minuteCountDown(spaceFreeTrainName, tMinutesTillTrain, frequencyMins);
 
   });
+
+  // Click event to delete a train
+  $(document).on('click', "#delete-train", function (e) {
+    // Stop page from refreshing
+    e.preventDefault();
+    // Grab target to delete
+    var trainToDelete = $(this)[0];
+    // Grab train id to delete
+    var trainKey = trainToDelete.parentNode.parentNode.id
+    // Call firebase and remove the train data
+    return firebase.database().ref(trainKey).remove()
+    .then(function () {
+      // Hide train row
+      var trainToHide = trainToDelete.parentNode.parentNode;
+      $(trainToHide).attr("style", "display:none");
+    });;
+
+  });
+
+  $(document).on('click', "#edit-train", function (e) {
+    // Stop page from refreshing
+    e.preventDefault();
+    console.log("Edit");
+    // Grab the uid to edit
+    var trainToEdit = $(this)[0].parentNode.parentNode.id;
+    console.log(trainToEdit);
+
+  });
+
+
 
 });
