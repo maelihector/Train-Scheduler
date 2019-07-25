@@ -102,12 +102,56 @@
     </div>
   </footer>
 
+  <!-- Modal Structure -->
+  <div id="edit_train" class="modal">
+    <div class="modal-content">
+      <h4 id="edit-train-form-title" class="center"></h4>
+      <form class="col s12">
+        <br>
+        <div class="row">
+          <div class="input-field col s6">
+            <i class="large material-icons prefix">train</i>
+            <input id="icon_train" type="text" class="validate trainName-edit-input" name="trainName">
+            <label class="active" id="trainName-edit-input-label">Train Name</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="large material-icons prefix">access_time</i>
+            <input id="icon_access_time" type="text" class="timepicker validate trainStart-edit-input" name="trainStart">
+            <label id="trainStart-edit-input-label">Train Start Time</label>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+          <div class="input-field col s6">
+            <i class="large material-icons prefix">av_timer</i>
+            <input id="icon_av_timer" type="number" class="validate frequency-edit-input" name="frequencyMins">
+            <label class="active" id="frequency-edit-input-label">Frequency in Minutes</label>
+          </div>
+          <div class="input-field col s6">
+            <i class="large material-icons prefix">place</i>
+            <input id="icon_place" type="text" class="validate destination-edit-input" name="destinationName">
+            <label class="active" id="destination-edit-input-label">Destination</label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <div class="center">
+        <button id="edit-train-btn" class="modal-close btn waves-effect waves-light" type="submit">Submit</button>
+      </div>
+    </div>
+  </div>
+
   <!-- javascript -->
   <script src="js/setup.js"></script>
   <script src="js/index.js"></script>
   <script type="text/javascript">
     $(document).ready(function () {
       $('.timepicker').timepicker();
+    });
+    $(document).ready(function () {
+      $('.modal').modal();
     });
   </script>
 </body>
