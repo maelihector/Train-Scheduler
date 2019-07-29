@@ -374,7 +374,7 @@ $(document).ready(() => {
 
     // Update instance attribute value by adding 1 to it (this will stop the already running minuteCountdown intervalId on the train)
     var instanceAttrVal = trainRow.attr('instance');
-    
+
     // Convert instance attribute value to a number to be able to add 1
     instanceAttrVal = Number(instanceAttrVal);
     instanceAttrVal++;
@@ -469,12 +469,19 @@ $(document).ready(() => {
     var formSubmitBtn = $("#edit-train-btn");
     $(formSubmitBtn).attr('trainid', trainKey);
 
+    // Fetch database train arrival and convert to standart time
+    var trainArrival = fetchTrain(trainKey);
+    trainArrival = trainArrival.start;
+    var hours = trainArrival.slice(0, 2);
+    var minues = trainArrival.slice(2, 4);
+    trainArrival = hours + ":" + minues;
+    trainArrival = convertToStandard(trainArrival);
+
     // Fetch train row data
     var trainRowData = trainRow.childNodes;
     var trainName = trainRowData[1].innerHTML;
     var trainDestination = trainRowData[2].innerHTML;
     var trainFrequency = trainRowData[3].innerHTML;
-    var trainArrival = trainRowData[5].innerHTML;
 
     // Fetch input element labels
     var editFormTitle = $("#edit-train-form-title");
@@ -486,7 +493,7 @@ $(document).ready(() => {
     // Change form title and input label innerHTMLs to refelect train that is to be edited
     editFormTitle[0].innerHTML = "Edit " + trainName;
     trainNameLabel[0].innerHTML = trainName;
-    trainStartLabel[0].innerHTML = 'Next Arrival: ' + trainArrival;
+    trainStartLabel[0].innerHTML = 'Train Start: ' + trainArrival;
     frequencyLabel[0].innerHTML = 'Frequency: ' + trainFrequency + ' Minutes';
     destinationLabel[0].innerHTML = trainDestination;
 
