@@ -1,6 +1,6 @@
 $(document).ready(() => {
 
-  // Create variable for the firebase database
+  // Create variable for firebase database
   var database = firebase.database();
 
   // Check for duplicate train names
@@ -37,14 +37,20 @@ $(document).ready(() => {
         }
       });
     });
-
     return isDuplicate;
   }
 
   // Check if train start time is in present day && before the current time in order to give correct next arrival
   function checkCurrentTime(trainStart, frequency) {
 
+    // Create empty variable for the valid train start time
     var validTrainStart;
+
+    // Fetch hours and minutes of train start time
+    var trainStartHours = trainStart.slice(0, 2);
+    trainStartHours = Number(trainStartHours);
+    var trainStartMinutes = trainStart.slice(2, 4);
+    trainStartMinutes = Number(trainStartMinutes);
 
     // Get current time
     var time = moment().format("HH:mm");
@@ -53,23 +59,19 @@ $(document).ready(() => {
     currentHours = Number(currentHours);
     var currentMinutes = time.split(":")[1];
     currentMinutes = Number(currentMinutes);
-    // Fetch hours and minutes of train start time
-    var trainStartHours = trainStart.slice(0, 2);
-    trainStartHours = Number(trainStartHours);
-    var trainStartMinutes = trainStart.slice(2, 4);
-    trainStartMinutes = Number(trainStartMinutes);
 
     // If train start hours are greater than current time
     if (trainStartHours > currentHours) {
       timeTravel();
+      // If train start and current time hours are the same, but train start minutes are greater than current minutes
     } else if (trainStartHours === currentHours && trainStartMinutes > currentMinutes) {
       timeTravel();
     } else {
+      // Else time IS valid
       validTrainStart = trainStart;
-      console.log(validTrainStart + " = " + trainStart);
     }
 
-    // Bring yesterday's last arrival time to current day
+    // Bring train start time to current day
     function timeTravel() {
 
       var newMinutes;
@@ -96,18 +98,17 @@ $(document).ready(() => {
         newMinutes = goForward(newMinutes);
       }
 
+      // Once train start hours equal 24, time has arrived to current day
       if (trainStartHours === 24) {
         trainStartHours = '00';
         if (newMinutes < 10) {
           newMinutes = "0" + newMinutes;
-          console.log(newMinutes);
         }
+        // Return a valid military time string
         validTrainStart = trainStartHours + newMinutes;
-        console.log(validTrainStart);
         return validTrainStart;
       }
     }
-
     return validTrainStart;
   }
 
@@ -162,7 +163,7 @@ $(document).ready(() => {
     // Add '0' in front of minutes if minutes < 10
     standardTime += (minutes < 10) ? ":0" + minutes : ":" + minutes;
     // Fetch meridian
-    standardTime += (hours >= 12) ? " P.M." : " A.M.";
+    standardTime += (hours >= 12) ? " PM" : " AM";
 
     return standardTime;
   }
@@ -198,12 +199,16 @@ $(document).ready(() => {
   // Update DOM with minutes until next train
   function minuteCountDown(trainKey, tMinutesTillTrain, frequencyMins) {
 
-    // Fetch instance attribute value
-    var instanceAttrVal = $('#' + trainKey).attr('instance');
-    console.log(instanceAttrVal);
+    // Fetch train row from DOM
+    var trainRow = $('#' + trainKey);
 
-    // Fetch DOM element where minutes will be updated
-    var minutesToBeReplaced = $('#minutesTillTrain' + trainKey);
+    // Fetch instance attribute value
+    var instanceAttrVal = trainRow.attr('instance');
+
+    // Fetch DOM elements where minutes and time arrival will need to be updated
+    var trainChildNodes = trainRow[0].childNodes;
+    var minutesToBeUpdated = $(trainChildNodes[4]);
+    var arrivalTimeToUpdate = $(trainChildNodes[5]);
 
     // Get current time seconds to be in sync with real time
     var beginningSeconds = moment().format('ss');
@@ -222,7 +227,7 @@ $(document).ready(() => {
 
     // Make sure to update DOM immediately if the train is currently at the station (has arrived)
     if (tMinutesTillTrain === frequencyMins) {
-      minutesToBeReplaced.text('arrived');
+      minutesToBeUpdated.text('arrived');
     }
 
     function increment() {
@@ -233,13 +238,13 @@ $(document).ready(() => {
       // When seconds reach 60
       if (beginningSeconds === 60) {
 
-        // Fetch instance attribute value again to check if it's been updated
+        // Fetch instance attribute value again to check if it's been updated with child_changed
         var updatedInstanceAttrVal = $('#' + trainKey).attr('instance');
-
+        // If instance has been updated with a greater value, stop instance so updated instance can take over
         if (updatedInstanceAttrVal > instanceAttrVal) {
           stop();
-          console.log(updatedInstanceAttrVal + " > " + instanceAttrVal);
-          console.log("stop() has been called");
+
+          // Else instance goes on as active
         } else {
 
           // If train shows as 'arrived'
@@ -255,16 +260,14 @@ $(document).ready(() => {
           if (tMinutesTillTrain === 0) {
             // Call function to calculate the time of the next arrival (since last arrival is now, tMinutesTillNextTrain === frequencyMins)
             var nextTrain = calculateTrainArrivalTime(frequencyMins);
-            // Find correct train to update
-            var trainId = $('#arrivalTime' + trainKey);
             // Update DOM with updated next train arrival time
-            trainId.text(nextTrain);
+            arrivalTimeToUpdate.text(nextTrain);
             // Show 'arrived' for one minute before resetting to frequency minutes
             tMinutesTillTrain = 'arrived';
           }
 
           //  Update DOM with correct minutes
-          minutesToBeReplaced.text(tMinutesTillTrain);
+          minutesToBeUpdated.text(tMinutesTillTrain);
 
           // reset seconds to 0
           beginningSeconds = 0;
@@ -276,7 +279,6 @@ $(document).ready(() => {
     function stop() {
       // Clear intervalId
       clearInterval(intervalId);
-
     }
   }
 
@@ -321,19 +323,19 @@ $(document).ready(() => {
     var destinationName = childSnapshot.val().destination;
     var frequencyMins = childSnapshot.val().frequency;
 
-    // Update a yesterday's train start start to today
-    // This is necessary to get correct diff in calculateTMinutesTillTrain(). 
-    var newTrainStart = checkCurrentTime(trainStart, frequencyMins);
-    console.log(newTrainStart);
-    console.log(trainStart);
+    // Create 'Update' and 'Remove' btns for each train
+    var editBtn = '<i id="edit-train-modal" data-target="edit_train" class="small material-icons modal-trigger">edit</i>';
+    var removeBtn = '<i id="delete-train" class="small material-icons">delete</i>';
 
-    if (newTrainStart !== trainStart) {
-      console.log(newTrainStart + " !== " + trainStart);
-      trainStart = newTrainStart;
-      console.log(trainStart);
+    // Add instance attr a value of 1 to keep track of future updates
+    var instanceAttrVal = 1;
+
+    // Update a yesterday's train start times to today. This is necessary to get correct diff in calculateTMinutesTillTrain() 
+    var validTrainStartTime = checkCurrentTime(trainStart, frequencyMins);
+    // If there is a difference it's not valid, change trainStart value to the valid train start value
+    if (validTrainStartTime !== trainStart) {
+      trainStart = validTrainStartTime;
     }
-    console.log(trainStart);
-
 
     // Fetch minutes until next train
     var tMinutesTillTrain = calculateTMinutesTillTrain(trainStart, frequencyMins);
@@ -341,17 +343,10 @@ $(document).ready(() => {
     // Fetch time of next train arrival
     var timeOfNextTrain = calculateTrainArrivalTime(tMinutesTillTrain);
 
-    // Create 'Update' and 'Remove' btns
-    var editBtn = '<i id="edit-train-modal" data-target="edit_train" class="small material-icons modal-trigger">edit</i>';
-    var removeBtn = '<i id="delete-train" class="small material-icons">delete</i>';
+    // Prepend train with values to table
+    $("#train-table > tbody").prepend("<tr instance='" + instanceAttrVal + "' id=" + trainKey + "><td class='center'>" + editBtn + removeBtn + "</td><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td>" + tMinutesTillTrain + "</td><td>" + timeOfNextTrain + "</td></tr>");
 
-    // Add instance attr a value of 1 to keep track of future updates
-    var instanceAttrVal = 1;
-
-    // Prepend train to table
-    $("#train-table > tbody").prepend("<tr instance='" + instanceAttrVal + "' id=" + trainKey + "><td class='center'>" + editBtn + removeBtn + "</td><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain" + trainKey + "'>" + tMinutesTillTrain + "</td><td id='arrivalTime" + trainKey + "'>" + timeOfNextTrain + "</td></tr>");
-
-    // Call function to update minutes countdown until next train arrives 
+    // Call function to update minutes countdown until next train arrival
     minuteCountDown(trainKey, tMinutesTillTrain, frequencyMins);
   });
 
@@ -361,11 +356,11 @@ $(document).ready(() => {
   database.ref().on('child_changed', function (childSnapshot) {
 
     // Fetch childSnapshot train values
+    var trainKey = childSnapshot.ref.key;
     var trainName = childSnapshot.val().name;
     var trainStart = childSnapshot.val().start;
     var destinationName = childSnapshot.val().destination;
     var frequencyMins = childSnapshot.val().frequency;
-    var trainKey = childSnapshot.ref.key;
 
     // Fetch train row from DOM
     var trainRow = $('#' + trainKey);
@@ -405,12 +400,12 @@ $(document).ready(() => {
 
     // Fetch train key from childSnapShot
     var trainKey = childSnapshot.ref.key;
+
     // Fetch train row from DOM
     var trainRow = $('#' + trainKey);
 
     // Remove train row from table
     trainRow.remove();
-
   });
 
   // Add  new train information input to table.
@@ -507,6 +502,7 @@ $(document).ready(() => {
 
     // Fetch train key
     var trainKey = $(this).attr('trainid');
+
     // Call function to fetch train values from database
     var existingTrain = fetchTrain(trainKey);
 
@@ -525,6 +521,11 @@ $(document).ready(() => {
     // Make sure we have all update values, if not, values will default to existing train values
     if (trainNameInput === "") {
       trainNameInput = trainName;
+    } else {
+      // Check and prevent duplicate train names
+      if (checkDuplicateTrainNames(trainNameInput) === true) {
+        return false;
+      }
     }
     if (trainStartInput === "") {
       trainStartInput = trainStart;
@@ -566,12 +567,12 @@ $(document).ready(() => {
 
     // Fetch train row
     var trainRow = $(this)[0].parentNode.parentNode;
+
     // Fetch train key
     var trainKey = $(trainRow).attr('id');
 
     // Call firebase and remove the train data
     firebase.database().ref(trainKey).remove();
-
   });
 
 });
