@@ -96,3 +96,7 @@ td>i:first-child:hover {
 td>i:last-child:hover {
   background-color: #ef6868;
 }
+
+.modal {
+  width: max-content;
+}
