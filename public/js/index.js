@@ -41,6 +41,76 @@ $(document).ready(() => {
     return isDuplicate;
   }
 
+  // Check if train start time is in present day && before the current time in order to give correct next arrival
+  function checkCurrentTime(trainStart, frequency) {
+
+    var validTrainStart;
+
+    // Get current time
+    var time = moment().format("HH:mm");
+    // Fetch hours and minutes of current time
+    var currentHours = time.split(":")[0];
+    currentHours = Number(currentHours);
+    var currentMinutes = time.split(":")[1];
+    currentMinutes = Number(currentMinutes);
+    // Fetch hours and minutes of train start time
+    var trainStartHours = trainStart.slice(0, 2);
+    trainStartHours = Number(trainStartHours);
+    var trainStartMinutes = trainStart.slice(2, 4);
+    trainStartMinutes = Number(trainStartMinutes);
+
+    // If train start hours are greater than current time
+    if (trainStartHours > currentHours) {
+      timeTravel();
+    } else if (trainStartHours === currentHours && trainStartMinutes > currentMinutes) {
+      timeTravel();
+    } else {
+      validTrainStart = trainStart;
+      console.log(validTrainStart + " = " + trainStart);
+    }
+
+    // Bring yesterday's last arrival time to current day
+    function timeTravel() {
+
+      var newMinutes;
+
+      // Loop that goes forward one hour
+      function goForward(mRemainder) {
+        // While minutes are less than 60, add frequency num
+        while (mRemainder < 60) {
+          mRemainder = mRemainder + frequency;
+        }
+        // When minutes reach > 60, divide by 60 and get remainder
+        mRemainder = mRemainder % 60;
+        // Add 1 to train start hours
+        trainStartHours++;
+        // Return remainder minutes
+        return mRemainder;
+      }
+
+      // Start loop to go forward one hour immediately at timeTravel() call
+      newMinutes = goForward(trainStartMinutes);
+
+      // Run goForward() one hour at a time while train start hours are less than 24
+      while (trainStartHours <= 23) {
+        newMinutes = goForward(newMinutes);
+      }
+
+      if (trainStartHours === 24) {
+        trainStartHours = '00';
+        if (newMinutes < 10) {
+          newMinutes = "0" + newMinutes;
+          console.log(newMinutes);
+        }
+        validTrainStart = trainStartHours + newMinutes;
+        console.log(validTrainStart);
+        return validTrainStart;
+      }
+    }
+
+    return validTrainStart;
+  }
+
   // Function that calculates minutes until next train arrival
   function calculateTMinutesTillTrain(trainStart, frequencyMins) {
 
@@ -128,19 +198,25 @@ $(document).ready(() => {
   // Update DOM with minutes until next train
   function minuteCountDown(trainKey, tMinutesTillTrain, frequencyMins) {
 
+    // Fetch instance attribute value
+    var instanceAttrVal = $('#' + trainKey).attr('instance');
+    console.log(instanceAttrVal);
+
     // Fetch DOM element where minutes will be updated
-    var minutesToBeReplaced = $('#minutesTillTrain');
+    var minutesToBeReplaced = $('#minutesTillTrain' + trainKey);
 
     // Get current time seconds to be in sync with real time
     var beginningSeconds = moment().format('ss');
 
     // Upkeep
     var intervalId;
+
     //  The run function sets an interval that runs the increment function once every second
     function run() {
       clearInterval(intervalId);
       intervalId = setInterval(increment, 1000);
     }
+
     //  Execute the run function to begin countdown
     run();
 
@@ -157,33 +233,50 @@ $(document).ready(() => {
       // When seconds reach 60
       if (beginningSeconds === 60) {
 
-        // If train shows as 'arrived'
-        if (tMinutesTillTrain === 'arrived') {
-          // Reset tMinutesTillTrain to frequency minutes
-          tMinutesTillTrain = frequencyMins;
+        // Fetch instance attribute value again to check if it's been updated
+        var updatedInstanceAttrVal = $('#' + trainKey).attr('instance');
+
+        if (updatedInstanceAttrVal > instanceAttrVal) {
+          stop();
+          console.log(updatedInstanceAttrVal + " > " + instanceAttrVal);
+          console.log("stop() has been called");
+        } else {
+
+          // If train shows as 'arrived'
+          if (tMinutesTillTrain === 'arrived') {
+            // Reset tMinutesTillTrain to frequency minutes
+            tMinutesTillTrain = frequencyMins;
+          }
+
+          //  Decrease tMinutesTillTrain by 1
+          tMinutesTillTrain--;
+
+          // If minutes until train arrives is 0
+          if (tMinutesTillTrain === 0) {
+            // Call function to calculate the time of the next arrival (since last arrival is now, tMinutesTillNextTrain === frequencyMins)
+            var nextTrain = calculateTrainArrivalTime(frequencyMins);
+            // Find correct train to update
+            var trainId = $('#arrivalTime' + trainKey);
+            // Update DOM with updated next train arrival time
+            trainId.text(nextTrain);
+            // Show 'arrived' for one minute before resetting to frequency minutes
+            tMinutesTillTrain = 'arrived';
+          }
+
+          //  Update DOM with correct minutes
+          minutesToBeReplaced.text(tMinutesTillTrain);
+
+          // reset seconds to 0
+          beginningSeconds = 0;
         }
-
-        //  Decrease tMinutesTillTrain by 1
-        tMinutesTillTrain--;
-
-        // If minutes until train arrives is 0
-        if (tMinutesTillTrain === 0) {
-          // Call function to calculate the time of the next arrival (since last arrival is now, tMinutesTillNextTrain === frequencyMins)
-          var nextTrain = calculateTrainArrivalTime(frequencyMins);
-          // Find correct train to update
-          var trainId = $('#arrivalTime' + trainKey);
-          // Update DOM with updated next train arrival time
-          trainId.text(nextTrain);
-          // Show 'arrived' for one minute before resetting to frequency minutes
-          tMinutesTillTrain = 'arrived';
-        }
-
-        //  Update DOM with correct minutes
-        minutesToBeReplaced.text(tMinutesTillTrain);
-
-        // reset seconds to 0
-        beginningSeconds = 0;
       }
+    }
+
+    // Add stop function to clearInterval after an arrival time or frequency update
+    function stop() {
+      // Clear intervalId
+      clearInterval(intervalId);
+
     }
   }
 
@@ -228,6 +321,20 @@ $(document).ready(() => {
     var destinationName = childSnapshot.val().destination;
     var frequencyMins = childSnapshot.val().frequency;
 
+    // Update a yesterday's train start start to today
+    // This is necessary to get correct diff in calculateTMinutesTillTrain(). 
+    var newTrainStart = checkCurrentTime(trainStart, frequencyMins);
+    console.log(newTrainStart);
+    console.log(trainStart);
+
+    if (newTrainStart !== trainStart) {
+      console.log(newTrainStart + " !== " + trainStart);
+      trainStart = newTrainStart;
+      console.log(trainStart);
+    }
+    console.log(trainStart);
+
+
     // Fetch minutes until next train
     var tMinutesTillTrain = calculateTMinutesTillTrain(trainStart, frequencyMins);
 
@@ -238,8 +345,11 @@ $(document).ready(() => {
     var editBtn = '<i id="edit-train-modal" data-target="edit_train" class="small material-icons modal-trigger">edit</i>';
     var removeBtn = '<i id="delete-train" class="small material-icons">delete</i>';
 
+    // Add instance attr a value of 1 to keep track of future updates
+    var instanceAttrVal = 1;
+
     // Prepend train to table
-    $("#train-table > tbody").prepend("<tr id=" + trainKey + "><td class='center'>" + editBtn + removeBtn + "</td><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain'>" + tMinutesTillTrain + "</td><td id='arrivalTime" + trainKey + "'>" + timeOfNextTrain + "</td></tr>");
+    $("#train-table > tbody").prepend("<tr instance='" + instanceAttrVal + "' id=" + trainKey + "><td class='center'>" + editBtn + removeBtn + "</td><td>" + trainName + "</td><td>" + destinationName + "</td><td>" + frequencyMins + "</td><td id='minutesTillTrain" + trainKey + "'>" + tMinutesTillTrain + "</td><td id='arrivalTime" + trainKey + "'>" + timeOfNextTrain + "</td></tr>");
 
     // Call function to update minutes countdown until next train arrives 
     minuteCountDown(trainKey, tMinutesTillTrain, frequencyMins);
@@ -261,6 +371,14 @@ $(document).ready(() => {
     var trainRow = $('#' + trainKey);
     // Fetch train row child nodes
     var rowChildNodes = trainRow[0].childNodes;
+
+    // Update instance attribute value by adding 1 to it (this will stop the already running minuteCountdown intervalId on the train)
+    var instanceAttrVal = trainRow.attr('instance');
+    
+    // Convert instance attribute value to a number to be able to add 1
+    instanceAttrVal = Number(instanceAttrVal);
+    instanceAttrVal++;
+    trainRow.attr('instance', instanceAttrVal);
 
     // Update innerHTML to reflect update
     rowChildNodes[1].innerHTML = trainName;
@@ -294,7 +412,6 @@ $(document).ready(() => {
     trainRow.remove();
 
   });
-
 
   // Add  new train information input to table.
   $("#add-train-btn").on("click", function (e) {
@@ -334,22 +451,6 @@ $(document).ready(() => {
     $(".trainStart-input").val("");
     $(".destination-input").val("");
     $(".frequency-input").val("");
-
-  });
-
-  // Click event to delete a train
-  $(document).on('click', "#delete-train", function (e) {
-
-    // Stop page from refreshing
-    e.preventDefault();
-
-    // Fetch train row
-    var trainRow = $(this)[0].parentNode.parentNode;
-    // Fetch train key
-    var trainKey = $(trainRow).attr('id');
-
-    // Call firebase and remove the train data
-    firebase.database().ref(trainKey).remove();
 
   });
 
@@ -450,5 +551,20 @@ $(document).ready(() => {
     return firebase.database().ref(trainKey).update(train);
   });
 
+  // Click event to delete a train
+  $(document).on('click', "#delete-train", function (e) {
+
+    // Stop page from refreshing
+    e.preventDefault();
+
+    // Fetch train row
+    var trainRow = $(this)[0].parentNode.parentNode;
+    // Fetch train key
+    var trainKey = $(trainRow).attr('id');
+
+    // Call firebase and remove the train data
+    firebase.database().ref(trainKey).remove();
+
+  });
 
 });
