@@ -1,4 +1,4 @@
-$(document).ready(() => {
+$(document).ready(function () {
 
   // Create variable for firebase database
   var database = firebase.database();
@@ -109,6 +109,8 @@ $(document).ready(() => {
         return validTrainStart;
       }
     }
+
+    // Return train start time
     return validTrainStart;
   }
 
@@ -188,7 +190,7 @@ $(document).ready(() => {
     }
 
     // Convert minutes to string in order to build military time string
-    minutes.toString;
+    minutes = minutes.toString;
 
     // Create military time string
     var trainStart = hours + minutes;
@@ -222,7 +224,7 @@ $(document).ready(() => {
       intervalId = setInterval(increment, 1000);
     }
 
-    //  Execute the run function to begin countdown
+    //  Execute the run function to begin countdown immediately
     run();
 
     // Make sure to update DOM immediately if the train is currently at the station (has arrived)
@@ -238,12 +240,11 @@ $(document).ready(() => {
       // When seconds reach 60
       if (beginningSeconds === 60) {
 
-        // Fetch instance attribute value again to check if it's been updated with child_changed
+        // Fetch instance attribute value again to check if a train has been updated (changed by `child_changed` function)
         var updatedInstanceAttrVal = $('#' + trainKey).attr('instance');
-        // If instance has been updated with a greater value, stop instance so updated instance can take over
+        // If instance has been updated with a greater value, stop instance so new instance can take over
         if (updatedInstanceAttrVal > instanceAttrVal) {
           stop();
-
           // Else instance goes on as active
         } else {
 
@@ -303,17 +304,18 @@ $(document).ready(() => {
           // Save childSnapshot values to trainObj variable
           trainObj = childSnapshot.val();
 
-          return trainObj
+          return trainObj;
         }
       });
     });
 
-    return trainObj
+    return trainObj;
   }
 
-  // 'child_added' retrieves lists of items or listens for additions to a list of items. 
-  // This event is triggered once for each existing child and then again every time a new child is added to the specified path.
-  // The listener is passed a snapshot containing the new child's data.
+  // Function to update the DOM when a train is added to firebase
+  // 'child_added' retrieves lists of items or listens for additions to a list of items
+  // This event is triggered once for each existing child and then again every time a new child is added to the specified path
+  // The listener is passed a snapshot containing the new child's data
   database.ref().on("child_added", function (childSnapshot) {
 
     // Fetch important values and save into variables
@@ -330,8 +332,9 @@ $(document).ready(() => {
     // Add instance attr a value of 1 to keep track of future updates
     var instanceAttrVal = 1;
 
-    // Update a yesterday's train start times to today. This is necessary to get correct diff in calculateTMinutesTillTrain() 
+    // If train start time is a future time (last train arrival was yesterday), calculate arrival from yesterday, not from -(future time). This is necessary to get correct diff in minutes until next train
     var validTrainStartTime = checkCurrentTime(trainStart, frequencyMins);
+
     // If there is a difference it's not valid, change trainStart value to the valid train start value
     if (validTrainStartTime !== trainStart) {
       trainStart = validTrainStartTime;
@@ -350,9 +353,10 @@ $(document).ready(() => {
     minuteCountDown(trainKey, tMinutesTillTrain, frequencyMins);
   });
 
-  // 'child_changed' listens for changes to the items in a list. 
-  // This event is triggered any time a child node is modified. This includes any modifications to descendants of the child node.
-  // The snapshot passed to the event listener contains the updated data for the child.
+  // Function to update the DOM when a train is updated on firebase
+  // 'child_changed' listens for changes to the items in a list
+  // This event is triggered any time a child node is modified. This includes any modifications to descendants of the child node
+  // The snapshot passed to the event listener contains the updated data for the child
   database.ref().on('child_changed', function (childSnapshot) {
 
     // Fetch childSnapshot train values
@@ -364,10 +368,11 @@ $(document).ready(() => {
 
     // Fetch train row from DOM
     var trainRow = $('#' + trainKey);
+
     // Fetch train row child nodes
     var rowChildNodes = trainRow[0].childNodes;
 
-    // Update instance attribute value by adding 1 to it (this will stop the already running minuteCountdown intervalId on the train)
+    // Update instance attribute value by adding 1 to it (this will stop the interval already running minuteCountdown intervalId on the train)
     var instanceAttrVal = trainRow.attr('instance');
 
     // Convert instance attribute value to a number to be able to add 1
@@ -383,9 +388,9 @@ $(document).ready(() => {
     // Update tMinutes till Train
     var tMinutesTillTrain = calculateTMinutesTillTrain(trainStart, frequencyMins);
     rowChildNodes[4].innerHTML = tMinutesTillTrain;
-    var updatedTrainArrival = calculateTrainArrivalTime(tMinutesTillTrain);
 
     // Update train arrival time
+    var updatedTrainArrival = calculateTrainArrivalTime(tMinutesTillTrain);
     rowChildNodes[5].innerHTML = updatedTrainArrival;
 
     // Call function to update minutes countdown until next train arrives 
@@ -393,9 +398,10 @@ $(document).ready(() => {
 
   });
 
-  // 'child_removed' listens for items being removed from a list. 
-  // This event is triggered when an immediate child is removed. 
-  // The snapshot passed to the callback block contains the data for the removed child.
+  // Function to update the DOM when a train is deleted from firebase
+  // 'child_removed' listens for items being removed from a list
+  // This event is triggered when an immediate child is removed
+  // The snapshot passed to the callback block contains the data for the removed child
   database.ref().on('child_removed', function (childSnapshot) {
 
     // Fetch train key from childSnapShot
@@ -408,14 +414,15 @@ $(document).ready(() => {
     trainRow.remove();
   });
 
-  // Add  new train information input to table.
-  $("#add-train-btn").on("click", function (e) {
+  // Add new train to firebase
+  $(document).on("click", "#add-train-btn", function (e) {
 
     // Stop page from refreshing
     e.preventDefault();
 
     // Fetch user input and trim white space
     var trainName = $(".trainName-input").val().trim();
+
     // Check and prevent duplicate train names
     if (checkDuplicateTrainNames(trainName) === true) {
       return false;
@@ -438,7 +445,7 @@ $(document).ready(() => {
       frequency: frequencyMins
     };
 
-    // Upload data to the firebase databse
+    // Upload data to firebase
     database.ref().push(newTrain);
 
     // Clear all text-boxes after data is pushed
@@ -449,52 +456,7 @@ $(document).ready(() => {
 
   });
 
-  // Click event to auto fill form labels
-  $(document).on('click', "#edit-train-modal", function (e) {
-
-    // Stop page from refreshing
-    e.preventDefault();
-
-    // Fetch train row
-    var trainRow = $(this)[0].parentNode.parentNode;
-    // Fetch train key
-    var trainKey = $(trainRow).attr('id');
-
-    // Add train id value to form submit btn 'id' attribute to use if user submits the change
-    var formSubmitBtn = $("#edit-train-btn");
-    $(formSubmitBtn).attr('trainid', trainKey);
-
-    // Fetch database train arrival and convert to standart time
-    var trainArrival = fetchTrain(trainKey);
-    trainArrival = trainArrival.start;
-    var hours = trainArrival.slice(0, 2);
-    var minues = trainArrival.slice(2, 4);
-    trainArrival = hours + ":" + minues;
-    trainArrival = convertToStandard(trainArrival);
-
-    // Fetch train row data
-    var trainRowData = trainRow.childNodes;
-    var trainName = trainRowData[1].innerHTML;
-    var trainDestination = trainRowData[2].innerHTML;
-    var trainFrequency = trainRowData[3].innerHTML;
-
-    // Fetch input element labels
-    var editFormTitle = $("#edit-train-form-title");
-    var trainNameLabel = $("#trainName-edit-input-label");
-    var destinationLabel = $("#destination-edit-input-label");
-    var frequencyLabel = $("#frequency-edit-input-label");
-    var trainStartLabel = $("#trainStart-edit-input-label");
-
-    // Change form title and input label innerHTMLs to refelect train that is to be edited
-    editFormTitle[0].innerHTML = "Edit " + trainName;
-    trainNameLabel[0].innerHTML = trainName;
-    trainStartLabel[0].innerHTML = 'Train Start: ' + trainArrival;
-    frequencyLabel[0].innerHTML = 'Frequency: ' + trainFrequency + ' Minutes';
-    destinationLabel[0].innerHTML = trainDestination;
-
-  });
-
-  // Click event to delete a train
+  // Click event to send edited train to firebase
   $(document).on('click', "#edit-train-btn", function (e) {
 
     // Stop page from refreshing
@@ -503,7 +465,7 @@ $(document).ready(() => {
     // Fetch train key
     var trainKey = $(this).attr('trainid');
 
-    // Call function to fetch train values from database
+    // Get train values from database
     var existingTrain = fetchTrain(trainKey);
 
     // Fetch existing train values seperately
@@ -518,11 +480,10 @@ $(document).ready(() => {
     var destinationNameInput = $(".destination-edit-input").val().trim();
     var frequencyMinsInput = $(".frequency-edit-input").val().trim();
 
-    // Make sure we have all update values, if not, values will default to existing train values
+    // If certain values are not being updated they will default to existing train values
     if (trainNameInput === "") {
       trainNameInput = trainName;
     } else {
-      // Check and prevent duplicate train names
       if (checkDuplicateTrainNames(trainNameInput) === true) {
         return false;
       }
@@ -557,9 +518,10 @@ $(document).ready(() => {
 
     // Call firebase to update train data
     return firebase.database().ref(trainKey).update(train);
+
   });
 
-  // Click event to delete a train
+  // Click event to delete a train on firebase
   $(document).on('click', "#delete-train", function (e) {
 
     // Stop page from refreshing
@@ -571,8 +533,55 @@ $(document).ready(() => {
     // Fetch train key
     var trainKey = $(trainRow).attr('id');
 
-    // Call firebase and remove the train data
+    // Call firebase and remove train
     firebase.database().ref(trainKey).remove();
+
+  });
+
+  // Click event to auto fill form labels
+  $(document).on('click', "#edit-train-modal", function (e) {
+
+    // Stop page from refreshing
+    e.preventDefault();
+
+    // Fetch train row
+    var trainRow = $(this)[0].parentNode.parentNode;
+
+    // Fetch train key
+    var trainKey = $(trainRow).attr('id');
+
+    // Add train id value to form submit btn 'id' attribute to use if user submits the change
+    var formSubmitBtn = $("#edit-train-btn");
+    $(formSubmitBtn).attr('trainid', trainKey);
+
+    // Fetch database train arrival and convert to standard time
+    var trainArrival = fetchTrain(trainKey);
+    trainArrival = trainArrival.start;
+    var hours = trainArrival.slice(0, 2);
+    var minues = trainArrival.slice(2, 4);
+    trainArrival = hours + ":" + minues;
+    trainArrival = convertToStandard(trainArrival);
+
+    // Fetch train row data
+    var trainRowData = trainRow.childNodes;
+    var trainName = trainRowData[1].innerHTML;
+    var trainDestination = trainRowData[2].innerHTML;
+    var trainFrequency = trainRowData[3].innerHTML;
+
+    // Fetch input element labels
+    var editFormTitle = $("#edit-train-form-title");
+    var trainNameLabel = $("#trainName-edit-input-label");
+    var destinationLabel = $("#destination-edit-input-label");
+    var frequencyLabel = $("#frequency-edit-input-label");
+    var trainStartLabel = $("#trainStart-edit-input-label");
+
+    // Change form title and input label innerHTML to refelect train that is currently being edited
+    editFormTitle[0].innerHTML = "Edit " + trainName;
+    trainNameLabel[0].innerHTML = trainName;
+    trainStartLabel[0].innerHTML = 'Train Start: ' + trainArrival;
+    frequencyLabel[0].innerHTML = 'Frequency: ' + trainFrequency + ' Minutes';
+    destinationLabel[0].innerHTML = trainDestination;
+
   });
 
 });

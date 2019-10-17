@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -32,7 +32,7 @@
   <h2 class="header center-align">Train Arrivals</h2>
 
   <div>
-    <img src="images/background3.jpg">
+    <img src="images/background3.jpg" alt="Train tracks running through a green forest.">
   </div>
 
   <br>
@@ -65,12 +65,12 @@
       <div class="row">
         <div class="input-field col s6">
           <i class="large material-icons prefix">train</i>
-          <input id="icon_train" type="text" class="validate trainName-input" name="trainName">
+          <input id="trainName-input" type="text" class="validate trainName-input" name="trainName">
           <label class="active" for="trainName-input">Train Name</label>
         </div>
         <div class="input-field col s6">
           <i class="large material-icons prefix">access_time</i>
-          <input id="icon_access_time" type="text" class="timepicker validate trainStart-input" name="trainStart">
+          <input id="trainStart-input" type="text" class="timepicker validate trainStart-input" name="trainStart">
           <label for="trainStart-input">Train Start Time (or last known arrival time)</label>
         </div>
       </div>
@@ -79,12 +79,12 @@
       <div class="row">
         <div class="input-field col s6">
           <i class="large material-icons prefix">av_timer</i>
-          <input id="icon_av_timer" type="number" class="validate frequency-input" name="frequencyMins" data-length="3">
+          <input id="frequency-input-label" type="number" class="validate frequency-input" name="frequencyMins" data-length="3">
           <label class="active" for="frequency-input-label">Frequency in Minutes</label>
         </div>
         <div class="input-field col s6">
           <i class="large material-icons prefix">place</i>
-          <input id="icon_place" type="text" class="validate destination-input" name="destinationName">
+          <input id="destination-input" type="text" class="validate destination-input" name="destinationName">
           <label class="active" for="destination-input">Destination</label>
         </div>
       </div>
@@ -105,18 +105,18 @@
   <!-- Modal Structure -->
   <div id="edit_train" class="modal">
     <div class="modal-content">
-      <h4 id="edit-train-form-title" class="center"></h4>
+      <h4 id="edit-train-form-title" class="center">Train</h4>
       <form class="col s12">
         <br>
         <div class="row">
           <div class="input-field col s6">
             <i class="large material-icons prefix">train</i>
-            <input id="icon_train" type="text" class="validate trainName-edit-input" name="trainName">
+            <input type="text" class="validate trainName-edit-input" name="trainName">
             <label class="active" id="trainName-edit-input-label">Train Name</label>
           </div>
           <div class="input-field col s6">
             <i class="large material-icons prefix">access_time</i>
-            <input id="icon_access_time" type="text" class="timepicker validate trainStart-edit-input"
+            <input type="text" class="timepicker validate trainStart-edit-input"
               name="trainStart">
             <label id="trainStart-edit-input-label">Train Start Time</label>
           </div>
@@ -126,12 +126,12 @@
         <div class="row">
           <div class="input-field col s6">
             <i class="large material-icons prefix">av_timer</i>
-            <input id="icon_av_timer" type="number" class="validate frequency-edit-input" name="frequencyMins" data-length="3">
+            <input type="number" class="validate frequency-edit-input" name="frequencyMins" data-length="3">
             <label class="active" id="frequency-edit-input-label">Frequency in Minutes</label>
           </div>
           <div class="input-field col s6">
             <i class="large material-icons prefix">place</i>
-            <input id="icon_place" type="text" class="validate destination-edit-input" name="destinationName">
+            <input type="text" class="validate destination-edit-input" name="destinationName">
             <label class="active" id="destination-edit-input-label">Destination</label>
           </div>
         </div>
@@ -147,7 +147,7 @@
   <!-- javascript -->
   <script src="js/setup.js"></script>
   <script src="js/index.js"></script>
-  <script type="text/javascript">
+  <script>
     $(document).ready(function () {
       $('.timepicker').timepicker();
     });
