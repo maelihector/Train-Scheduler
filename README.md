@@ -17,7 +17,7 @@ Train Arrivals also allows for new train submissions, existing train edits, and 
 ## How does Train Arrivals work?
 
 
-Train Arrivals uses [Firebase Realtime Database](https://firebase.google.com/) and [Moment.js](http://momentjs.com/)to host arrival and departure data and to retrieve and manipulate the data. This allows for Train Arrivals to provide up-to-date information about various trains; namely their arrival time and a minute countdown until the train's next arrival.
+Train Arrivals uses [Firebase Realtime Database](https://firebase.google.com/) and [Moment.js](http://momentjs.com/) to host arrival and departure data and to retrieve and manipulate the data. This allows for Train Arrivals to provide up-to-date information about various trains, namely their arrival time and a minute countdown until the train's next arrival.
 
 
 ## What does Train Arrivals do?
